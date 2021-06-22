@@ -40,14 +40,16 @@
                 <div id="oc-clients-full" class="owl-carousel owl-carousel-full image-carousel carousel-widget"
                     data-margin="30" data-nav="true" data-pagi="false" data-autoplay="5000" data-items-xs="3"
                     data-items-sm="3" data-items-md="5" data-items-lg="6" data-items-xl="7">
-                    <div class="oc-item"><a href="#"><img src="{{ asset('brand_logo/Lenovo.jpg') }}" alt="Brands"></a></div>
-                    <div class="oc-item"><a href="#"><img src="{{ asset('brand_logo/nzxt.jpg') }}" alt="Brands"></a></div>
-                    <div class="oc-item"><a href="#"><img src="{{ asset('brand_logo/Seagate.jpg') }}" alt="Brands"></a></div>
-                    <div class="oc-item"><a href="#"><img src="{{ asset('brand_logo/Tp.jpg') }}" alt="Brands"></a></div>
-                    <div class="oc-item"><a href="#"><img src="{{ asset('brand_logo/Ant.jpg') }}" alt="Brands"></a></div>
-                    <div class="oc-item"><a href="#"><img src="{{ asset('brand_logo/cooler.jpg') }}" alt="Brands"></a></div>
-                    <div class="oc-item"><a href="#"><img src="{{ asset('brand_logo/Dell.jpg') }}" alt="Brands"></a></div>
-                    <div class="oc-item"><a href="#"><img src="{{ asset('brand_logo/nzxt.jpg') }}" alt="Brands"></a></div>
+
+                    @foreach ($brands as $brand )
+                        <div class="oc-item">
+                            <a href="{{ route('public.product_list') }}?brand={{ $brand->slug }}">
+                                @if(file_exists(public_path('web/images/brand_images/thumbnails/' . $brand->logo)) && $brand->logo)
+                                    <img src="{{ asset('web/images/brand_images/thumbnails/' . $brand->logo ) }}" alt="{{ $brand->name }}"/>
+                                @endif
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
             </div>
 

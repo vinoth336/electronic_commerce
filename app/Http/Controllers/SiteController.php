@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Banners;
+use App\Brand;
 use App\CategoryType;
 use App\Faqs;
 use App\HomePage;
@@ -34,7 +35,7 @@ class SiteController extends Controller
         $allProducts = Product::activeProject()->with('ProductImages')->limit(50)->orderBy('sequence')->get();
         $homePage = HomePage::where('is_default', 1)->first();
         $homePageSections = $homePage->home_page_sections()->orderBy('home_page_sections.position')->get();
-
+        $brands = Brand::orderBy('name')->get();
 
         return view('site.home', [
             'siteInformation' => $siteInformation,
@@ -47,6 +48,7 @@ class SiteController extends Controller
             'verticalWideBanner' => $verticalWideBanner ?? new Banners(),
             'allProducts' => $allProducts,
             'page' => 'home',
+            'brands' => $brands,
             'homePageSections' => $homePageSections
         ]);
     }
