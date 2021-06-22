@@ -50,6 +50,7 @@ var Cart = {
                 "qty": qty
             },
             "success": function(data) {
+                console.log(data);
                 Cart.addCartItemsFromServerToLocatStorage(data);
                 Cart.refreshCartItems();
             },
@@ -238,6 +239,8 @@ var Cart = {
         var sum = 0;
         var content = '';
         var totalItem = '';
+
+        console.log(cart);
         $.each(cart, function(productId, productInfo) {
             var cartList = cartItemListTemplate;
             var totalAmount = productInfo.qty * productInfo.productPrice;

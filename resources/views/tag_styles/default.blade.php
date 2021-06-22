@@ -15,7 +15,7 @@
                                     $productImage = $productImage->image ?? 'no-image.png';
                                 @endphp
                                 <div class="oc-item">
-                                    <div class="product">
+                                    <div class="product"  id="product_{{ $product->slug }}">
                                         <div class="product-image">
                                             <a href="{{ route('view_product', $product->slug) }}"  target="_blank">
                                                 <img class="product_image lazy" data-src="{{ asset('web/images/product_images/thumbnails/' . $productImage ) }}" alt="{{ $product->name }}" loading="lazy">

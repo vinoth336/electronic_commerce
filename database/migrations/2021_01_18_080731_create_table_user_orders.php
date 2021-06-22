@@ -15,7 +15,7 @@ class CreateTableUserOrders extends Migration
     {
         Schema::create('user_orders', function (Blueprint $table) {
             $table->uuid('id');
-            $table->uuid('user_id');
+            $table->bigInteger('user_id');
             $table->string('order_no');
             $table->integer('order_status_id');
             $table->decimal('total_amount');
