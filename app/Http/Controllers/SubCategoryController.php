@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\CategoryType;
 use App\Http\Requests\SubCategoriesRequest;
+use App\Services;
 use App\SubCategory;
 use Exception;
 use Illuminate\Http\Request;
@@ -30,7 +32,9 @@ class SubCategoryController extends Controller
      */
     public function create()
     {
-        return view('sub_categories.create');
+        $categories = Services::get();
+
+        return view('sub_categories.create', ['categories' => $categories]);
     }
 
     /**
@@ -46,6 +50,7 @@ class SubCategoryController extends Controller
         $category_type->name = $request->input('name');
         $category_type->slug_name = str_slug($request->input('name'));
         $category_type->sequence = SubCategory::get()->count() + 1;
+        $category_type->category_id = $request->input('category');
         $category_type->save();
 
         return redirect()->route('sub_categories.index')->with('status', 'Created Successfully');
@@ -71,7 +76,9 @@ class SubCategoryController extends Controller
      */
     public function edit(SubCategory $subCategory)
     {
-        return view('sub_categories.edit')->with(['subCategory' => $subCategory]);
+        $categories = Services::get();
+
+        return view('sub_categories.edit')->with(['subCategory' => $subCategory, 'categories' => $categories]);
     }
 
     /**
@@ -85,6 +92,7 @@ class SubCategoryController extends Controller
     {
         $subCategory->name = $request->input('name');
         $subCategory->slug_name = str_slug($request->input('name'));
+        $subCategory->category_id = $request->input('category');
         $subCategory->save();
 
         return redirect()->route('sub_categories.index')->with('status', 'Created Successfully');

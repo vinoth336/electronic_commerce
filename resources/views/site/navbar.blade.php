@@ -1,7 +1,7 @@
 <nav class="primary-menu sub-title">
 	<ul class="menu-container">
         @foreach($categoriesTypes as $categoryType)
-		<li class="menu-item mega-menu sub-menu">
+		{{-- <li class="menu-item mega-menu sub-menu">
 			<a class="menu-link" href="#">
 				<div>{{ $categoryType->name }}</div>
             </a>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <button class="sub-menu-trigger icon-chevron-right"></button>
+            <button class="sub-menu-trigger icon-chevron-right"></button> --}}
 		</li>
         @endforeach
 	
@@ -89,3 +89,5 @@
         @endguest
 	</ul>
 </nav>
+
+

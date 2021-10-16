@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\File;
 
 trait StoreImage {
 
+    public $customImageField;
+
 /**
      * Store uploaded Testimonial image
      *
@@ -41,7 +43,11 @@ trait StoreImage {
                 }
             }
             $this->unlinkImage($this->getOriginal($this->fileParamName));
-            $this->{$this->imageFieldName} = $name;
+            if($this->customImageField) {
+                $this->{$this->customImageField} = $name;
+            } else {
+                $this->{$this->imageFieldName} = $name;
+            }
 
             return true;
         } elseif (request()->input('remove_image')) {
@@ -98,6 +104,12 @@ trait StoreImage {
         $filePath = $thumbnailpath . '/' . $name;
         $img->save($filePath);
         //remove_image_background($filePath);
+    }
+
+
+    public function storeCustomImage($image, $customFieldName, $thumbnailSize = null) {
+        $this->customImageField = $customFieldName;
+        $this->storeImage($image, null);
     }
 
     public function makeFolder($filePath)

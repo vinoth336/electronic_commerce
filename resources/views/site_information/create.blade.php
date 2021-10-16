@@ -74,6 +74,33 @@
                                 </div>
 
                                 <div class="row">
+                                    <label class="col-sm-2 col-form-label">{{ __('Fav Icon') }}</label>
+                                    <div class="col-sm-7">
+                                        <div class="fileinput @if(!$siteInformation->fav_icon) fileinput-new @else fileinput-exists @endif text-center" data-provides="fileinput">
+                                            <div class="fileinput-new thumbnail">
+                                              <img src="{{ asset('material') . "/img/image_placeholder.jpg" }}" style="width: 100px" alt="...">
+                                            </div>
+                                            <div class="fileinput-preview fileinput-exists thumbnail">
+                                                    <img src="{{ asset('web/images/logo/' . $siteInformation->fav_icon ) }}" />
+                                            </div>
+                                            <div>
+                                              <span class="btn btn-rose btn-file">
+                                                <span class="fileinput-new">Select image</span>
+                                                <span class="fileinput-exists">Change</span>
+                                                <input type="hidden" name="remove_image" value="" />
+                                                <input type="file" name="fav_icon" accept="image/ico" >
+                                              </span>
+                                              <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                            </div>
+                                          </div>
+                                          @if ($errors->has('fav_icon'))
+                                                <span id="name-error" class="error text-danger"
+                                                    for="input-contact_person">{{ $errors->first('fav_icon') }}</span>
+                                          @endif
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <label class="col-sm-2 col-form-label">{{ __('Meta Descrition') }}</label>
                                     <div class="col-sm-7">
                                         <div class="form-group{{ $errors->has('meta_description') ? ' has-danger' : '' }}">

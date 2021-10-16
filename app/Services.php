@@ -40,9 +40,25 @@ class Services extends Model
         return $this->belongsTo(CategoryType::class, 'category_type_id', 'id');
     }
 
+    public function subcategories()
+    {
+        return $this->hasMany(SubCategory::class, 'category_id', 'id');        
+    }
+
     public static function boot()
     {
         parent::boot();
+
+        static::created(function() {
+            setSiteMenuValueInCache(getSiteMenus());
+        });
+
+        static::updated(function() {
+            setSiteMenuValueInCache(getSiteMenus());
+        });
+        static::deleted(function() {
+            setSiteMenuValueInCache(getSiteMenus());
+        });
 
     }
 }

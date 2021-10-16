@@ -53,6 +53,15 @@ class Product extends Model
         return $this->belongsToMany(Tag::class,'product_tag', 'product_id', 'tag_id')->withTimestamps();
     }
 
+    public function product_specification_values()
+    {
+        return $this->hasMany(ProductSpecificationValue::class, 'product_id', 'id');
+    }
+
+    public function product_feature_values()
+    {
+        return $this->hasMany(ProductFeatureValue::class, 'product_id', 'id');
+    }
 
     public static function boot()
     {

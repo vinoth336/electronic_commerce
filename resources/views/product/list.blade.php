@@ -20,7 +20,6 @@
                     <div class="card-header card-header-primary">
                         <h4 class="card-title float-left">{{ __('Product') }}</h4>
                         <a href="{{ route('product.create') }}" class="btn btn-success float-right"><i class="material-icons">add</i></a>
-
                         <div class="btn-group float-right" role="group" aria-label="Button group with nested dropdown" style="margin-right: 10px;margin-top: 5px !important;">
                             <div class="btn-group" role="group">
                               <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,11 +34,9 @@
                         <a href="{{ route('product.export') }}" class="btn btn-info float-right" style="margin-right: 10px;margin-top: 5px !important;">
                             Export Xls
                         </a>
-
                     </div>
                     <div class="card-body ">
                         <div class="table-responsive">
-
                             <table id="table_product_list" class="table table-striped table-no-bordered table-hover dataTable dtr-inline">
                                 <thead>
                                     <tr>

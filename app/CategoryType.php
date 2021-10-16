@@ -20,6 +20,17 @@ class CategoryType extends Model
             $builder->where('status', 1);
             $builder->orderBy('sequence', 'asc');
         });
+
+        static::created(function() {
+            setSiteMenuValueInCache(getSiteMenus());
+        });
+
+        static::updated(function() {
+            setSiteMenuValueInCache(getSiteMenus());
+        });
+        static::deleted(function() {
+            setSiteMenuValueInCache(getSiteMenus());
+        });
     }
 
     public function categories()

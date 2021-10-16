@@ -1,6 +1,6 @@
 @extends('site.app')
 @section('content')
-    <section id="slider" class="slider-element slider-parallax swiper_wrapper min-vh-30 min-vh-md-50" data-autoplay="5000"
+    <section id="slider" class="slider-element slider-parallax swiper_wrapper min-vh-25 min-vh-md-50" data-autoplay="5000"
         data-speed="650" data-loop="true" data-effect="fade" data-progress="true">
         <div class="slider-inner">
             <div class="swiper-container swiper-parent">
@@ -14,9 +14,12 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="swiper-slide-bg"
+                            {{-- <div class="swiper-slide-bg"
                                 style="background-image: url('{{ asset('web/images/slider/' . $slider->slider) }}');">
-                            </div>
+                            </div> --}}
+                            
+                            <img class="swiper-slide-bg" src="{{ asset('web/images/slider/' . $slider->slider) }}">
+
                         </div>
                     @endforeach
                 </div>
