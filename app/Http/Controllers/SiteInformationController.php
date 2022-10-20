@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\SiteInformation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SiteInformationController extends Controller
 {
@@ -52,12 +53,23 @@ class SiteInformationController extends Controller
         $siteInformation->working_hours_sun = $request->input('working_hours_sun');
         $image = $request->has('logo') ? $request->file('logo') : null;
         $siteInformation->storeImage($image);
+        $favIcon = $request->has('fav_icon') ? $request->file('fav_icon') : null;
+        $storagePath = public_path('web/images/logo/') ;
+        $favIconStoragePathName = 'favicon.ico';
 
+        //Unlink FavIcon
+        if ($favIcon) {
+            $siteInformation->unlinkImage($siteInformation->fav_icon);
+            if(move_uploaded_file($favIcon->getRealPath(), $storagePath . $favIconStoragePathName )) {
+                $siteInformation->fav_icon = $favIconStoragePathName;    
+            } else {
+                $siteInformation->fav_icon = null;
+            }
+        }
         $siteInformation->save();
         setSiteInformationInCache();
 
         return redirect()->route('site_information.index');
-
     }
 
     /**

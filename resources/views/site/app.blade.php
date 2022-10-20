@@ -1,63 +1,67 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
 
     @php
         $isHomePage = $page ?? false;
-
-        if($productDetail ?? false ) {
-            $description = $productDetail->description ?? $productDetail->name . " Rs " . number_format($productDetail->actual_price, 2) ;
+        
+        if ($productDetail ?? false) {
+            $description = $productDetail->description ?? $productDetail->name . ' Rs ' . number_format($productDetail->actual_price, 2);
         } else {
             $description = $siteInformation->meta_description;
         }
         $description = strip_tags(Str::substr($description, 0, 200));
         $productImages = $productDetail->productImages ?? null;
-        if($productImages == null) {
+        if ($productImages == null) {
             $image = asset('web/images/logo/' . $siteInformation->logo);
         } else {
-            if($productImages->count() > 0) {
+            if ($productImages->count() > 0) {
                 $image = asset('web/images/product_images/' . $productImages->first()->image);
             } else {
                 $image = asset('web/images/logo/' . $siteInformation->logo);
             }
         }
     @endphp
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<meta name="author" content="{{ $siteInformation->site_name }}" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="{{ $siteInformation->site_name }}" />
     <meta name="description" content="{{ $description }}" />
     <link rel="canonical" href="{{ env('APP_URL') }}" />
+    <link rel="shortcut icon" href="{{ asset('web/images/logo/' . $siteInformation->fav_icon) }}" type="image/x-icon"
+        sizes="16x16">
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ $productDetail->name ?? $siteInformation->site_name }}">
-    <meta property="og:description" content="{{  $description  }}">
+    <meta property="og:description" content="{{ $description }}">
     <meta property="og:url" content="{{ $productDetail->productUrl ?? env('APP_URL') }}">
     <meta property="og:site_name" content="{{ $siteInformation->site_name }}">
-    <meta property="og:image" content="{{ $image }}" >
-    <meta property="og:type" content="website" >
+    <meta property="og:image" content="{{ $image }}">
+    <meta property="og:type" content="website">
     <meta property="article:publisher" content="">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:creator" content="@GreenPharmacyHall">
-    <meta name="twitter:site" content="@GreenPharmacyHall">
+    <meta name="twitter:creator" content="@{{ $siteInformation->site_name }}">
+    <meta name="twitter:site" content="@{{ $siteInformation->site_name }}">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-	<link
-		href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&amp;display=swap"
+    <link
+        href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&amp;display=swap"
         rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" href="{{ asset('web/style.css') }}?v={{ $version }}" type="text/css" />
-	<link rel="stylesheet" href="{{ asset('web/css/bootstrap.css') }}?v={{ $version }}" type="text/css" />
-	<link rel="stylesheet" href="{{ asset('web/css/font-icons.css') }}" type="text/css" />
-	<link rel="stylesheet" href="{{ asset('web/css/animate.css') }}" type="text/css" />
-	<link rel="stylesheet" href="{{ asset('web/css/magnific-popup.css') }}" type="text/css" />
-	<link rel="stylesheet" href="{{ asset('web/css/custom.css') }}" type="text/css" />
-	<link rel="stylesheet" href="{{ asset('web/css/swiper.css') }}" type="text/css" />
-	<link rel="stylesheet" type="text/css" href="{{ asset('web/include/rs-plugin/css/settings.css') }}" media="screen" />
-	<link rel="stylesheet" type="text/css" href="{{ asset('web/include/rs-plugin/css/layers.css') }}">
+    <link rel="stylesheet" href="{{ asset('web/css/bootstrap.css') }}?v={{ $version }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('web/css/font-icons.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('web/css/animate.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('web/css/magnific-popup.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('web/css/custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('web/css/swiper.css') }}" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('web/include/rs-plugin/css/settings.css') }}"
+        media="screen" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('web/include/rs-plugin/css/layers.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('web/include/rs-plugin/css/navigation.css') }}">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
     @stack('css')
     <title>{{ $siteInformation->site_name }}</title>
-    <script src="{{  asset('web/js/jquery.js') }}"></script>
+    <script src="{{ asset('web/js/jquery.js') }}"></script>
     <script>
         $.ajaxSetup({
             headers: {
@@ -69,102 +73,173 @@
 
 <body class="stretched">
     <style>
-        .ws_float{
-	position:fixed;
-	width:60px;
-	height:60px;
-	bottom:89px;
-	right:22px;
-	background-color:#25d366;
-	color:#FFF;
-	border-radius:50px;
-	text-align:center;
-    font-size:30px;
-	box-shadow: 2px 2px 3px #999;
-  z-index:100;
-}
+        .ws_float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 89px;
+            right: 22px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+        }
 
-.my-float{
-	margin-top: 9px;
-}
-        </style>
+        .my-float {
+            margin-top: 9px;
+        }
 
-	<div id="wrapper" class="clearfix">
-		<header id="header" class="full-header" data-logo-height="60" data-mobile-sticky=true data-mobile-sticky-logo-height="30" data-sticky-logo-height="30" data-menu-padding="32">
-			<div id="header-wrap" class="">
-				<div class="container">
-					<div class="header-row top-search-parent">
+    </style>
+    <style>
+        .product_search_box {
+            width: 97%;
+            box-sizing: border-box;
+            border: 1px solid #e8e4e4;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('{{ asset('site_images/searchicon.png') }}');
+            background-position: 10px 11px;
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 40px;
+            -webkit-transition: width 0.4s ease-in-out;
+            transition: width 0.4s ease-in-out;
+            margin: 10px auto 10px auto;
+            height: 45px;
+        }
 
-						<!-- Logo
-						============================================= -->
-						<div id="logo" class="mobile-width-100" style="border:none" >
-							<a  href="{{ route('home') }}" class="standard-logo"
+    </style>
+
+    <div id="wrapper" class="clearfix">
+        <header id="header" class="full-header" data-logo-height="50" data-mobile-logo-height="30"
+            data-mobile-sticky=true data-mobile-sticky-logo-height="30" data-sticky-logo-height="30"
+            data-menu-padding="32">
+            <div id="header-wrap" class="">
+                <div class="container">
+                    <div class="header-row top-search-parent">
+
+                        <!-- Logo
+      ============================================= -->
+                        <div id="logo" class="" style="border:none">
+                            <a href="{{ route('home') }}" class="standard-logo"
                                 data-dark-logo="{{ asset('web/images/logo/' . $siteInformation->logo) }}">
                                 <img src="{{ asset('web/images/logo/' . $siteInformation->logo) }}"
-									alt="{{ config('app.name') }}" >
+                                    alt="{{ config('app.name') }}">
                             </a>
-							<a href="{{ route('home') }}" class="retina-logo" data-dark-logo="">
-                                <img src="{{ asset('web/images/logo/' . $siteInformation->logo) }}" alt="{{ config('app.name') }}" style="height: 37px !important;">
+                            <a href="{{ route('home') }}" class="retina-logo" data-dark-logo="">
+                                <img src="{{ asset('web/images/logo/' . $siteInformation->logo) }}"
+                                    alt="{{ config('app.name') }}" style="height: 25px !important;">
                             </a>
                         </div>
-
-						<div class="header-misc mobile-ml-auto">
-
-                            @guest
-                            <div class="header-misc-icon d-sm-block d-md-none d-lg-none">
-								<a href="#" class="menu-link user_login" data-toggle="modal" data-target=".show-login-modal" style="width: 96px;margin-top: -14px;font-weight: 480;text-transform: none;color: #27680e">
-                                    Login
-                                </a>
-							</div>
-                            @endguest
-
-							<!-- Top Search
-							============================================= -->
-							<div id="top-search" class="header-misc-icon">
-								<a href="#" id="top-search-trigger"><i class="icon-line-search"></i><i class="icon-line-cross"></i></a>
-							</div><!-- #top-search end -->
-
-							<!-- Top Cart
-							============================================= -->
-							<div id="top-cart" class="header-misc-icon d-sm-block">
-								<a href="#" id="top-cart-trigger"><i class="icon-line-bag"></i><span
-                                    class="top-cart-number" id="top-cart-number"></span>
-                                </a>
-								<div class="top-cart-content">
-									<div class="top-cart-title">
-										<h4>Cart</h4>
-									</div>
-									<div class="top-cart-items" id="top-cart-items">
-
-									</div>
-									<div class="top-cart-action">
-										<span class="top-checkout-price" id="top-checkout-price"></span>
-										<a href="{{ route('public.cart.checkout') }}" class="button button-3d button-small m-0">Checkout</a>
-									</div>
-								</div>
-							</div><!-- #top-cart end -->
-
-						</div>
-
-						<div id="primary-menu-trigger">
-							<svg class="svg-trigger" viewBox="0 0 100 100"><path d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"></path><path d="m 30,50 h 40"></path><path d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"></path></svg>
-						</div>
-
-						<!-- Primary Navigation
-						============================================= -->
-						@include('site.navbar')
-                        <!-- #primary-menu end -->
-
-						<form class="top-search-form" action="/search" method="get" style="width: 250px !important;">
-							<input type="text" name="q" id="product_search_box" class="form-control" value="" placeholder="Type &amp; Hit Enter.." autocomplete="off">
+                        <div class="search-container d-none d-md-block d-lg-block" style="width: 75%; margin: auto">
+						<form action="/search" method="get"  style="margin-bottom: 0px">
+                            <input id="product_search_box1" style="" class="form-control product_search_box" type="text"
+                                placeholder="Search For Product, Brand, Category" name="q">
 						</form>
+                        </div>
+                        
+                        <div class="header-misc mobile-ml-auto" >
+							@guest
+								<div class="">
+									<a href="#" class="menu-link user_login" data-toggle="modal" data-target=".show-login-modal"
+										style="font-weight:normal; text-transform: none;font-size: 14px;margin-top: 2px; margin-left: 2px ">
+										Login
+									</a>
+								</div>
+                        	@endguest
+                            <div id="top-cart" class="header-misc-icon d-sm-block">
+                                <a href="#" id="top-cart-trigger"><i class="icon-line-bag"></i><span
+                                        class="top-cart-number" id="top-cart-number"></span>
+                                </a>
+                                <div class="top-cart-content">
+                                    <div class="top-cart-title">
+                                        <h4>Cart</h4>
+                                    </div>
+                                    <div class="top-cart-items" id="top-cart-items">
 
-					</div>
+                                    </div>
+                                    <div class="top-cart-action">
+                                        <span class="top-checkout-price" id="top-checkout-price"></span>
+                                        <a href="{{ route('public.cart.checkout') }}"
+                                            class="button button-3d button-small m-0">Checkout</a>
+                                    </div>
+                                </div>
+                            </div><!-- #top-cart end -->
+                        </div>
+                    </div>
+                </div>
+				<div class="search-container d-block d-md-none" style="width: 100%; margin: auto">
+					<form action="/search" method="get"  style="margin-bottom: 0px">
+						<input id="product_search_box1" style="" class="form-control product_search_box" type="text"
+							placeholder="Search For Product, Brand, Category" name="q">
+					</form>
 				</div>
-			</div>
-			<div class="header-wrap-clone" style="height: 100px;"></div>
-		</header>
+            </div>
+
+
+
+            <div class="header-wrap-clone" style="height: 100px;"></div>
+        </header>
+        <div id="page-menu" class="no-sticky" data-mobile-sticky="false" sticky-page-menu="false">
+            <div id="page-menu-wrap">
+                <div class="container">
+                    <div class="page-menu-row">
+                        <nav class="page-menu-nav">
+                            <ul class="page-menu-container m-auto">
+                                @foreach ($categoriesTypes as $categoryType)
+                                    <li class="page-menu-item">
+                                        <a href="#">
+                                            <div>{{ $categoryType->name }}</div>
+                                        </a>
+                                        <ul class="page-menu-sub-menu">
+                                            @foreach ($categoryType->categories as $category)
+                                                <li class="page-menu-item">
+                                                    <a href="#">
+                                                        <div>{{ $category->name }}</div>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endforeach
+                                {{-- <li class="page-menu-item"><a href="#">
+                                        <div>Features</div>
+                                    </a></li>
+                                <li class="page-menu-item"><a href="#">
+                                        <div>Models</div>
+                                    </a></li>
+                                <li class="page-menu-item"><a href="#">
+                                        <div>Reviews</div>
+                                    </a>
+                                    <ul class="page-menu-sub-menu">
+                                        <li class="page-menu-item"><a href="#">
+                                                <div>Expert Reviews</div>
+                                            </a></li>
+                                        <li class="page-menu-item"><a href="#">
+                                                <div>User Reviews</div>
+                                            </a></li>
+                                    </ul>
+                                </li>
+                                <li class="page-menu-item"><a href="#">
+                                        <div>Compare</div>
+                                    </a></li>
+                                <li class="page-menu-item"><a href="#">
+                                        <div>Build</div>
+                                    </a></li>
+                                <li class="page-menu-item"><a href="#">
+                                        <div>Order</div>
+                                    </a></li> --}}
+                            </ul>
+                        </nav>
+                        <div id="page-menu-trigger" class="ml-auto"><i class="icon-reorder"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         @yield('content')
 
         @include('site.footer')
-	</div>
+    </div>

@@ -1,10 +1,10 @@
 @extends('site.app')
 
 @section('content')
-    <section id="content">
+    <section id="content" style="margin-top: 20px;">
         <div class="content-wrap">
             <div class="container-fluid clearfix">
-                <div class="row gutter-40 col-mb-80">
+                <div class="row gutter-40">
                     <div class="postcontent col-lg-9 order-lg-last">
                         <div class="single-product">
                             <div class="product" id="product_{{ $productDetail->slug }}">
@@ -83,12 +83,15 @@
                         </div>
                     </div>
                     @include('site.side_filter')
-
+                
                 </div>
 
                 <div class="line"></div>
-                <div class="w-100">
-                    <h4>Related Products</h4>
+                <div class="w-100" style="margin-bottom: 20px;">
+                    <h4 class="inline-block">Related Products</h4>
+                    <span class="inline-block" style="margin-left: 20px">
+                        <a href="/search?sub_categories[]={{ optional($productDetail->sub_category)->slug_name }}&{{ $relatedCategories }}">View More</a>
+                    </span>
                     <div class="owl-carousel product-carousel carousel-widget" data-margin="30" data-pagi="false"
                         data-autoplay="5000" data-items-xs="1" data-items-md="2" data-items-lg="3"
                         data-items-xl="4">
@@ -141,10 +144,6 @@
                                 </div>
                             </div>
                             @endforeach
-                            <div class="oc-item">
-
-                                <a href="/search?sub_categories[]={{ optional($productDetail->sub_category)->slug_name }}&{{ $relatedCategories }}">View More...</a>
-                            </div>
                     </div>
                 </div>
 

@@ -1,3 +1,5 @@
+
+
 <div class="modal fade show-login-modal" tabindex="-1" role="dialog" aria-labelledby="LoginFormModal"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -249,7 +251,7 @@ function triggerLoginForm()
 }
 
 $(function() {
-    $( "#product_search_box" ).autocomplete({
+    $( ".product_search_box" ).autocomplete({
       source: function( request, response ) {
         $.ajax({
           url: "/search_product",
@@ -292,11 +294,6 @@ $(function() {
   }
 
 </script>
-
-<a href="https://wa.me/91{{ $siteInformation->phone_no }}?text=Hi {{ $siteInformation->site_name }}," class="ws_float"
-    target="_blank">
-    <i class="fa icon-whatsapp my-float"></i>
-</a>
 
 <div class="cookie-overlay p-4 d-none">
     <div class="d-flex">

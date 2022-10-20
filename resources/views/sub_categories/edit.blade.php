@@ -55,6 +55,27 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">{{ __('Category Type') }}</label>
+                  <div class="col-sm-7">
+                      <div class="form-group{{ $errors->has('icon') ? ' has-danger' : '' }}">
+                          <select name="category" class="selectpicker">
+                              @foreach($categories as $category)
+                                  <option value="{{ $category->id }}"
+                                      @if(old('category', $subCategory->category_id) == $category->id)
+                                          selected
+                                      @endif
+                                  > {{ $category->name }}
+                                  </option>
+                              @endforeach
+                          </select>
+                          @if ($errors->has('category'))
+                              <span id="name-error" class="error text-danger"
+                                  for="input-category">{{ $errors->first('category') }}</span>
+                          @endif
+                      </div>
+                  </div>
+              </div>
               </div>
               <div class="card-footer ml-auto mr-auto">
                 <a href="{{ route('sub_categories.index') }}" class="btn btn-info">{{ __('Cancel') }}</a>

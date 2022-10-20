@@ -9,7 +9,6 @@
             <span style="height: 20px;"></span>
         </div>
     </section>
-
     <section id="content">
         <div class="content-wrap">
             <div class="container clearfix">

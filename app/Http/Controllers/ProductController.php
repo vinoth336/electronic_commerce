@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Brand;
 use App\Exports\ExportProductData;
+use App\Features;
+use App\FeatureValue;
 use App\Http\Requests\CreateServiceRequest;
 use App\Http\Requests\GetSlugNameRequest;
 use App\Http\Requests\ImportProductImageRequest;
@@ -11,6 +13,8 @@ use App\Imports\ImportProduct;
 use App\Product;
 use App\ProductImage;
 use App\Services;
+use App\Specification;
+use App\SpecificationValue;
 use App\SubCategory;
 use App\Tag;
 use Exception;
@@ -45,10 +49,22 @@ class ProductController extends Controller
 
         $services = $this->getServices()->orderBy('sequence')->get();
         $subCategories = SubCategory::orderBy('sequence')->get();
+        $specifications = Specification::orderBy('name')->get();
+        $specificationValues = SpecificationValue::orderBy('name')->get();
+        $features = Features::orderBy('name')->get();
+        $featureValues = FeatureValue::orderBy('name')->get();
         $tags = Tag::get();
         $brands = Brand::get();
 
-        return view('product.create', ['services' => $services, 'brands' => $brands, 'subCategories' => $subCategories, 'tags' => $tags]);
+        return view('product.create', [
+            'services' => $services, 
+            'brands' => $brands, 
+            'subCategories' => $subCategories, 
+            'specifications' => $specifications,
+            'specificationValues' => $specificationValues,
+            'features' => $features,
+            'featureValues' => $featureValues,
+            'tags' => $tags]);
     }
 
     /**
@@ -100,12 +116,24 @@ class ProductController extends Controller
         $subCategories = SubCategory::orderBy('sequence')->get();
         $brands = Brand::get();
         $tags = Tag::get();
-
+        $specifications = Specification::orderBy('name')->get();
+        $specificationValues = SpecificationValue::orderBy('name')->get();
+        $features = Features::orderBy('name')->get();
+        $featureValues = FeatureValue::orderBy('name')->get();
+        $productSpecifications = $product->product_specification_values()->with(['specifications', 'specification_values'])->orderBy('sequence')->get();
+        $productFeatures = $product->product_feature_values()->with(['features', 'feature_values'])->orderBy('sequence')->get();
+        
         return view('product.edit')->with([
             'product' => $product,
             'services' => $services,
             'brands' => $brands,
             'subCategories' => $subCategories,
+            'specifications' => $specifications,
+            'specificationValues' => $specificationValues,
+            'features' => $features,
+            'featureValues' => $featureValues,
+            'productSpecifications' => $productSpecifications,
+            'productFeatures' => $productFeatures,
             'tags' => $tags
         ]);
     }
@@ -215,8 +243,36 @@ class ProductController extends Controller
         $product->status = $request->has('status') ? 1 : 0;
         $product->save();
         $product->services()->sync($request->input('services'));
-        $tagIds = $this->findOrCreateTags($request->tags ?? []);
+        $tagIds = $this->findOrCreate('Tag', $request->tags ?? []);
         $product->product_tags()->sync($tagIds);
+        $specificationHighlighted = $request->specification_highlights ?? [];
+        $specificationIds = $this->findOrCreate('Specification', $request->specifications ?? []);
+        $specificationValuesIds = $this->findOrCreate('SpecificationValue', $request->specification_values ?? []);
+        $key = 0;
+        $productSpecificationValues = [];
+        foreach ($specificationIds as $specificationId) {
+            $isHighlighted = $specificationHighlighted[$key] ?? null;
+            $specificationValueId = $specificationValuesIds[$key] ?? null;
+            $productSpecificationValues[$specificationId] =
+                ['product_id' => $product->id, 'specification_id' => $specificationId, 'specification_value_id' => $specificationValueId, 'highlighted' => $isHighlighted, 'sequence' => $key + 1, 'block_id' => null];
+            $key++;
+        }
+        $product->product_specification_values()->delete();
+        $product->product_specification_values()->insert($productSpecificationValues);
+        $featureHighlighted = $request->feature_highlights ?? [];
+        $featureIds = $this->findOrCreate('Features', $request->features ?? []);
+        $featureValuesIds = $this->findOrCreate('FeatureValue', $request->feature_values ?? []);
+        $key = 0;
+        $productFeatureValues = [];
+        foreach ($featureIds as $featureId) {
+            $isHighlighted = $featureHighlighted[$key] ?? null;
+            $featureValueId = $featureValuesIds[$key] ?? null;
+            $productFeatureValues[$featureId] =
+                ['product_id' => $product->id, 'feature_id' => $featureId, 'feature_value_id' => $featureValueId, 'highlighted' => $isHighlighted, 'sequence' => $key + 1, 'block_id' => null];
+            $key++;
+        }
+        $product->product_feature_values()->delete();
+        $product->product_feature_values()->insert($productFeatureValues);
         $product->touch(); // This will help to add in cache
         if ($request->has('product_images')) {
             $portfolioImageCount = $product->ProductImages()->count() + 1;
@@ -327,28 +383,22 @@ class ProductController extends Controller
         }
     }
 
-    public function findOrCreateTags($tags)
+    public function findOrCreate($model, $values)
     {
-        $tagIds = [];
-        foreach ($tags as $tag) 
+        $model = getModelName($model);
+        $ids = [];
+        foreach ($values as $value) 
         {
-            $data = Tag::firstOrCreate(['name' => $tag]);
-            $tagIds[] = (string) $data->id;
+            $data = $model::firstOrCreate(['name' => $value]);
+            $ids[] = (string) $data->id;
         }
 
-        return $tagIds;
+        return $ids;
     }
 
     function export()
     {
         return Excel::download(new ExportProductData, 'products.xlsx');
-
-    }
-
-    public function productHasTags(Request $request, Tag $tag)
-    {
-
-        $products = $tag->product_tags()->OrderBy('name')->get();
 
     }
 }

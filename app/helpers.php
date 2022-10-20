@@ -13,9 +13,7 @@ function getSiteMenus()
 {
 
     $categoriesType = CategoryType::with([ 'categories' => function($services) {
-        $services->with(['products' => function($products) {
-            $products->with('sub_category');
-        }])->orderBy('sequence');
+        $services->with('subcategories')->orderBy('sequence');
     }])->get();
 
     return $categoriesType;
@@ -143,4 +141,14 @@ function bannerIsEditMode($mode, $targetClassName)
         foreach($files as $file) {
             copy($file, base_path('public/js/new.js'));
         }
+    }
+
+    function getModelName($model)
+    {
+        return 'App\\' . $model;
+    }
+
+    function getValuesToJson($values)
+    {
+        return json_encode($values, true);
     }

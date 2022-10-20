@@ -107,7 +107,6 @@ class ImportProduct implements ToModel, WithHeadingRow
             );
             return $brand->id ?? null;
         }
-
         return null;
     }
 }
