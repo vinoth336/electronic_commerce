@@ -1,22 +1,20 @@
 <?php
 
 //use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\BannerController;
-use App\Http\Controllers\ChangePasswordRequestController;
-use App\Http\Controllers\EnquiriesController;
-use App\Http\Controllers\PharmaOrderAdminController;
-use App\Http\Controllers\TestimonialController;
-use App\Http\Controllers\VariationController;
 use App\Http\Controllers\Auth;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartSettingController;
 use App\Http\Controllers\CategoryTypeController;
+use App\Http\Controllers\ChangePasswordRequestController;
+use App\Http\Controllers\EnquiriesController;
 use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\HomePageSectionController;
 use App\Http\Controllers\NotificationManagerController;
+use App\Http\Controllers\PharmaOrderAdminController;
 use App\Http\Controllers\PharmaOrderController;
 use App\Http\Controllers\PortfolioImageController;
 use App\Http\Controllers\ProductController;
@@ -28,6 +26,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SiteInformationController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserControllerAdmin;
 use App\Http\Controllers\UserLoginController;
@@ -35,6 +34,7 @@ use App\Http\Controllers\UserOrderAdminController;
 use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\UserOrderDetailController;
 use App\Http\Controllers\UserRegistrationController;
+use App\Http\Controllers\VariationController;
 use Illuminate\Support\Facades\Route;
 
 /*

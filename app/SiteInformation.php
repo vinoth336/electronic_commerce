@@ -2,15 +2,14 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\StoreImage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Jamesh\Uuid\HasUuid;
 
 class SiteInformation extends Model
 {
     use HasFactory;
-
     use StoreImage, HasUuid;
 
     protected $fileParamName = 'logo';
