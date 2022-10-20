@@ -42,7 +42,7 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 Route::get('/cart/checkout/', 'CartController@checkout')->name('public.cart.checkout');
-Route::group(['middleware' => 'auth:web'], function () {
+Route::middleware('auth:web')->group(function () {
     Route::get('dashboard', 'UserController@dashboard')->name('public.dashboard');
     Route::get('change_password', 'UserController@changePassword')->name('public.change_password');
     Route::post('change_password', 'UserController@updatePassword');
@@ -67,12 +67,12 @@ Route::group(['middleware' => 'auth:web'], function () {
     ->middleware('throttle:5,1');
 });
 
-Route::group(['prefix' => 'admin'], function () {
+Route::prefix('admin')->group(function () {
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('login', 'Auth\LoginController@login');
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
-    Route::group(['middleware' => 'auth:admin_users'], function () {
+    Route::middleware('auth:admin_users')->group(function () {
         Route::get('dashboard', 'HomeController@index')->name('admin.dashboard');
         Route::put('faqs/update_sequence', 'FaqsController@updateSequence')->name('faqs.update_sequence');
         Route::resource('faqs', 'FaqsController');
@@ -142,11 +142,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('user_orders/{order}/download_invoice', 'UserOrderAdminController@download_invoice')->name('user_orders.download_non_pharma_invoice');
         Route::resource('user_orders', 'UserOrderAdminController')->except(['store', 'create', 'edit']);
 
-        Route::group(['middleware' => 'auth'], function () {
-            Route::resource('admin_users', 'UserController', ['except' => ['show']]);
-            Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
-            Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
-            Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+        Route::middleware('auth')->group(function () {
+            Route::resource('admin_users', 'UserController')->except('show');
+            Route::get('profile', 'ProfileController@edit')->name('profile.edit');
+            Route::put('profile', 'ProfileController@update')->name('profile.update');
+            Route::put('profile/password', 'ProfileController@password')->name('profile.password');
         });
         Route::get('users/export', 'UserControllerAdmin@export')->name('users.export');
         Route::resource('users', 'UserControllerAdmin')->except(['store', 'create', 'edit']);
