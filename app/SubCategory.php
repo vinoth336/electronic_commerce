@@ -15,16 +15,15 @@ class SubCategory extends Model
     {
         parent::boot();
 
-        static::created(function() {
+        static::created(function () {
             setSiteMenuValueInCache(getSiteMenus());
         });
 
-        static::updated(function() {
+        static::updated(function () {
             setSiteMenuValueInCache(getSiteMenus());
         });
-        static::deleted(function() {
+        static::deleted(function () {
             setSiteMenuValueInCache(getSiteMenus());
         });
-
     }
 }

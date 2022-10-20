@@ -24,9 +24,10 @@ class SubCategoriesRequest extends FormRequest
     public function rules()
     {
         $id = $this->id;
+
         return [
             'name' => 'required|string',
-            'slug_name' => "required|unique:sub_categories,slug_name,{$id},id"
+            'slug_name' => "required|unique:sub_categories,slug_name,{$id},id",
         ];
     }
 }

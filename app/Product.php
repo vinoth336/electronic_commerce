@@ -4,7 +4,6 @@ namespace App;
 
 use App\Traits\RelatedProducts;
 use App\Traits\StoreImage;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Jamesh\Uuid\HasUuid;
 
@@ -30,7 +29,7 @@ class Product extends Model
 
     public function ProductImages()
     {
-        return $this->hasMany(ProductImage::class, 'product_id', 'id' );
+        return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
 
     public function services()
@@ -50,7 +49,7 @@ class Product extends Model
 
     public function product_tags()
     {
-        return $this->belongsToMany(Tag::class,'product_tag', 'product_id', 'tag_id')->withTimestamps();
+        return $this->belongsToMany(Tag::class, 'product_tag', 'product_id', 'tag_id')->withTimestamps();
     }
 
     public function product_specification_values()
@@ -67,22 +66,21 @@ class Product extends Model
     {
         parent::boot();
 
-        static::saved(function($model){
-            if($model->brand_id) {
+        static::saved(function ($model) {
+            if ($model->brand_id) {
                 //setSiteMenuValueInCache(getSiteMenus());
             }
         });
 
-        static::updated(function($model){
-            if($model->brand_id) {
+        static::updated(function ($model) {
+            if ($model->brand_id) {
                 //setSiteMenuValueInCache(getSiteMenus());
             }
         });
 
-        static::deleted(function($model){
+        static::deleted(function ($model) {
             setSiteMenuValueInCache(getSiteMenus());
         });
-
     }
 
     public function getRouteKeyName()
@@ -92,18 +90,16 @@ class Product extends Model
 
     public function getActualPriceAttribute()
     {
-
         return $this->discount_amount > 0 ? $this->discount_amount : $this->price;
     }
 
     public function getProductUrlAttribute()
     {
-        return env('APP_URL') . "product/" . $this->slug;
+        return env('APP_URL').'product/'.$this->slug;
     }
 
     public static function scopeActiveProject($query)
     {
         return $query->where('products.status', 1);
     }
-
 }

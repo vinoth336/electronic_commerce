@@ -41,23 +41,19 @@ class SliderController extends Controller
      */
     public function store(SliderRequest $request)
     {
-
         DB::beginTransaction();
-        try{
-
-
+        try {
             $this->saveSlider(new Slider(), $request);
 
             DB::commit();
 
             return redirect()->route('slider.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Store Data"], 500);
         }
-
     }
 
     /**
@@ -92,20 +88,18 @@ class SliderController extends Controller
     public function update(SliderRequest $request, Slider $slider)
     {
         DB::beginTransaction();
-        try{
-
+        try {
             $this->saveSlider($slider, $request);
 
             DB::commit();
 
             return redirect()->route('slider.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Store Data"], 500);
         }
-
     }
 
     /**
@@ -118,8 +112,7 @@ class SliderController extends Controller
     {
         DB::beginTransaction();
 
-        try{
-
+        try {
             $slider->unlinkImage($slider->slider);
 
             $slider->delete();
@@ -127,28 +120,25 @@ class SliderController extends Controller
             DB::commit();
 
             return redirect()->route('slider.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Delete Data"], 500);
         }
-
     }
 
     public function updateSequence(Request $request)
     {
-
         DB::beginTransaction();
 
-        try
-        {
-            foreach($request->input('sequence') as $sequence => $id) {
+        try {
+            foreach ($request->input('sequence') as $sequence => $id) {
                 $service = Slider::find($id);
                 $service->sequence = $sequence + 1;
                 $service->save();
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             Log::error($e->getMessage());
             response(['status' => 'Cannot Update Sequence'], 500);
@@ -159,12 +149,11 @@ class SliderController extends Controller
         return response(['message' => 'Updated Successfully'], 200);
     }
 
-
-     /**
+    /**
      * Create or Update the Slider in storage
      *
-     * @param SliderRequest $request
-     * @param Slider $slider
+     * @param  SliderRequest  $request
+     * @param  Slider  $slider
      * @return Slider
      */
     public function saveSlider(Slider $service, $request)
@@ -175,7 +164,7 @@ class SliderController extends Controller
         $service->sequence = $service->sequence ?? Slider::count() + 1;
         $service->font_color = $request->input('font_color');
         $service->save();
+
         return $service;
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\CategoryType;
 use App\Http\Requests\SubCategoriesRequest;
 use App\Services;
 use App\SubCategory;
@@ -12,14 +11,13 @@ use Illuminate\Support\Facades\DB;
 
 class SubCategoryController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-
         $sub_categories = SubCategory::OrderBy('sequence')->get();
 
         return view('sub_categories.list', ['sub_categories' => $sub_categories]);
@@ -45,7 +43,6 @@ class SubCategoryController extends Controller
      */
     public function store(SubCategoriesRequest $request)
     {
-
         $category_type = new SubCategory();
         $category_type->name = $request->input('name');
         $category_type->slug_name = str_slug($request->input('name'));
@@ -54,7 +51,6 @@ class SubCategoryController extends Controller
         $category_type->save();
 
         return redirect()->route('sub_categories.index')->with('status', 'Created Successfully');
-
     }
 
     /**
@@ -120,17 +116,15 @@ class SubCategoryController extends Controller
      */
     public function updateSequence(Request $request)
     {
-
         DB::beginTransaction();
 
-        try
-        {
-            foreach($request->input('sequence') as $sequence => $id) {
+        try {
+            foreach ($request->input('sequence') as $sequence => $id) {
                 $category_type = SubCategory::find($id);
                 $category_type->sequence = $sequence + 1;
                 $category_type->save();
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             response('Cannot Update Sequence', 500);
         }

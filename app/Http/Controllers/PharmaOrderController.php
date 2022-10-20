@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatePharmaOrderRequest;
 use App\Mail\PharmaNewOrderSendNotificationToAdmin;
 use App\Mail\PharmaOrderCancelledSendNotificationToAdmin;
-use App\Mail\SendOrderNotificationToAdmin;
 use App\OrderStatus;
 use App\PharmaPrescription;
 use App\PrescriptionDetail;
@@ -51,7 +50,7 @@ class PharmaOrderController extends Controller
             return redirect()->route('public.order_list');
         } catch (Exception $e) {
             DB::rollback();
-            Log::error('Error Occurred in UserController@update - ' . $e->getMessage());
+            Log::error('Error Occurred in UserController@update - '.$e->getMessage());
             echo $e->getMessage();
             exit;
         }
@@ -110,7 +109,7 @@ class PharmaOrderController extends Controller
             return redirect()->route('public.order_list');
         } catch (Exception $e) {
             DB::rollback();
-            Log::error('Error Occurred in UserController@update - ' . $e->getMessage());
+            Log::error('Error Occurred in UserController@update - '.$e->getMessage());
             echo 'Cant process';
             exit;
         }

@@ -2,6 +2,7 @@
 
 //use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,8 +25,6 @@ Route::get('/search_product', 'ProductSearchController@searchProduct')->name('pu
 
 Route::get('/search', 'ProductSearchController@index')->name('public.product_list');
 
-
-
 Route::get('/registration', 'UserRegistrationController@index')->name('public.registration');
 Route::post('/registration', 'UserRegistrationController@create');
 Route::get('/register/success/{id}', 'UserRegistrationController@registerationSuccess')->name('public.registration_success');
@@ -43,7 +42,7 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 Route::get('/cart/checkout/', 'CartController@checkout')->name('public.cart.checkout');
-Route::group(['middleware' => 'auth:web'], function() {
+Route::group(['middleware' => 'auth:web'], function () {
     Route::get('dashboard', 'UserController@dashboard')->name('public.dashboard');
     Route::get('change_password', 'UserController@changePassword')->name('public.change_password');
     Route::post('change_password', 'UserController@updatePassword');
@@ -73,9 +72,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('login', 'Auth\LoginController@login');
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
-
-    Route::group(['middleware' => 'auth:admin_users'], function(){
-
+    Route::group(['middleware' => 'auth:admin_users'], function () {
         Route::get('dashboard', 'HomeController@index')->name('admin.dashboard');
         Route::put('faqs/update_sequence', 'FaqsController@updateSequence')->name('faqs.update_sequence');
         Route::resource('faqs', 'FaqsController');
@@ -111,34 +108,32 @@ Route::group(['prefix' => 'admin'], function () {
         Route::resource('product', 'ProductController');
         Route::resource('home_pages', 'HomePageController');
 
-        #HOME PAGE SECTION MANAGER
+        //HOME PAGE SECTION MANAGER
         Route::get('home_pages/{homePage}/load/tags/section', 'HomePageController@loadTagSection')->name('load_section');
         Route::get('home_pages/{homePage}/load/banner/section', 'HomePageController@loadBannerSection')->name('load_section');
         Route::get('home_pages/{homePage}/add_section', 'HomePageSectionController@create')->name('home_page_add_section');
         Route::post('home_pages/{homePage}/save_section', 'HomePageSectionController@storeSection')->name('home_page_save_section');
         Route::get('home_pages/{homePage}/make_default', 'HomePageController@makeDefault')->name('home_pages.make_default');
 
-        ##UPDATE HOME PAGE SECTION CONTENT
+        //#UPDATE HOME PAGE SECTION CONTENT
         Route::PUT('home_pages/{homePage}/tag/{homePageSection}/update', 'HomePageSectionController@update')->name('home_page_update_section');
 
-        ##TAG SECTION
+        //#TAG SECTION
         Route::get('home_pages/{homePage}/tag/{homePageSection}/edit', 'HomePageSectionController@editTag')->name('home_page_edit_tag_section');
-        
-        ##BANNER SECTION
+
+        //#BANNER SECTION
         Route::get('home_pages/{homePage}/load/style/{styleId}/banner', 'HomePageSectionController@loadBannerStyle')->name('load_banner_style');
         Route::get('views/banner_styles/js/{fileName}', 'HomePageSectionController@loadJs')->name('load_banner_js_file');
         Route::get('home_pages/{homePage}/banner/{homePageSection}/edit', 'HomePageSectionController@editBanner')->name('home_page_edit_banner_section');
 
-        ## SECTION MAKE VIEW
+        //# SECTION MAKE VIEW
         Route::get('home_pages/{homePage}/section/{homePageSection}/render_view', 'HomePageSectionController@renderSection')->name('home_page_render_section');
         Route::get('home_pages/{homePage}/render_view', 'HomePageController@renderContent')->name('home_page_render_content');
-
-
 
         Route::delete('home_pages/{homePage}/home_page_section/{homePageSection}', 'HomePageSectionController@destroy')->name('home_page_delete_section');
         Route::put('home_pages/home_page_section/update_sequence', 'HomePageSectionController@updateSequence')->name('update_home_page_section_sequence');
 
-        #HOME PAGE SECTION MANAGER ENDED HERE
+        //HOME PAGE SECTION MANAGER ENDED HERE
 
         Route::put('product_images/update_sequence', 'PortfolioImageController@updateSequence')->name('product_images.update_sequence');
         Route::delete('product_images/{productImage}', 'PortfolioImageController@destroy')->name('portfolio_image.delete');
@@ -155,9 +150,5 @@ Route::group(['prefix' => 'admin'], function () {
         });
         Route::get('users/export', 'UserControllerAdmin@export')->name('users.export');
         Route::resource('users', 'UserControllerAdmin')->except(['store', 'create', 'edit']);
-
-
     });
-
 });
-

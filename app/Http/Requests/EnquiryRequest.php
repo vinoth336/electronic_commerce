@@ -29,7 +29,7 @@ class EnquiryRequest extends FormRequest
             'service' => 'nullable',
             'subject' => 'required',
             'message' => 'required|min:10|max:500|',
-            'user_phone_no' => 'numeric|required|digits:10'
+            'user_phone_no' => 'numeric|required|digits:10',
         ];
     }
 }

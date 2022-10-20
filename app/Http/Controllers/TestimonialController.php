@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateTestimonialRequest;
 use App\Testimonial;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -41,22 +40,19 @@ class TestimonialController extends Controller
      */
     public function store(CreateTestimonialRequest $request)
     {
-
         DB::beginTransaction();
-        try{
-
+        try {
             $this->saveTestimonials(new Testimonial(), $request);
 
             DB::commit();
 
             return redirect()->route('testimonials.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Store Data"], 500);
         }
-
     }
 
     /**
@@ -91,20 +87,18 @@ class TestimonialController extends Controller
     public function update(CreateTestimonialRequest $request, Testimonial $testimonial)
     {
         DB::beginTransaction();
-        try{
-
+        try {
             $this->saveTestimonials($testimonial, $request);
 
             DB::commit();
 
             return redirect()->route('testimonials.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Store Data"], 500);
         }
-
     }
 
     /**
@@ -117,8 +111,7 @@ class TestimonialController extends Controller
     {
         DB::beginTransaction();
 
-        try{
-
+        try {
             $testimonial->unlinkImage($testimonial->client_image);
 
             $testimonial->delete();
@@ -126,21 +119,19 @@ class TestimonialController extends Controller
             DB::commit();
 
             return redirect()->route('testimonials.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Delete Data"], 500);
         }
-
     }
 
-
-     /**
+    /**
      * Create or Update the Testimonial in storage
      *
-     * @param TestimonialsRequest $request
-     * @param Testimonial $Testimonial
+     * @param  TestimonialsRequest  $request
+     * @param  Testimonial  $Testimonial
      * @return Testimonial
      */
     public function saveTestimonials(Testimonial $testimonial, $request)
@@ -152,7 +143,7 @@ class TestimonialController extends Controller
         $testimonial->client_designation = $request->input('client_designation');
         $testimonial->comment = $request->input('comment');
         $testimonial->save();
+
         return $testimonial;
     }
-
 }

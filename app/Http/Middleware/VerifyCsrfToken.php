@@ -31,7 +31,7 @@ class VerifyCsrfToken extends Middleware
             });
         }
 
-	return redirect()->route("public.login")->with('message', 'Page Expired');
+        return redirect()->route('public.login')->with('message', 'Page Expired');
         // throw new TokenMismatchException('CSRF token mismatch.');
     }
 }

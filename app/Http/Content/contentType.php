@@ -4,9 +4,7 @@ namespace App\Content;
 
 class ContentType
 {
-
     protected $fillable = [];
-
 
     public function setAttributes($request)
     {

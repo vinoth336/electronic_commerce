@@ -11,7 +11,6 @@ class CategoryType extends Model
 {
     use SoftDeletes, HasUuid;
 
-
     protected static function boot()
     {
         parent::boot();
@@ -21,14 +20,14 @@ class CategoryType extends Model
             $builder->orderBy('sequence', 'asc');
         });
 
-        static::created(function() {
+        static::created(function () {
             setSiteMenuValueInCache(getSiteMenus());
         });
 
-        static::updated(function() {
+        static::updated(function () {
             setSiteMenuValueInCache(getSiteMenus());
         });
-        static::deleted(function() {
+        static::deleted(function () {
             setSiteMenuValueInCache(getSiteMenus());
         });
     }

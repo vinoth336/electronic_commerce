@@ -24,7 +24,7 @@ class CustomerForgotPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'forgot_password_phone_no' => 'required|numeric|regex:/[0-9]{10}/|exists:users,phone_no'
+            'forgot_password_phone_no' => 'required|numeric|regex:/[0-9]{10}/|exists:users,phone_no',
         ];
     }
 }

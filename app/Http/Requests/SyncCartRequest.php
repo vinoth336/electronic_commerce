@@ -27,7 +27,7 @@ class SyncCartRequest extends FormRequest
             'items.*.productName' => 'required|string',
             'items.*.productPrice' => 'required|numeric',
             'items.*.qty' => 'required|numeric',
-            'items.*.status' => 'required'
+            'items.*.status' => 'required',
         ];
     }
 }

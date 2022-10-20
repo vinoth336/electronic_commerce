@@ -32,6 +32,7 @@ class ServicesController extends Controller
     public function create()
     {
         $category_types = CategoryType::get();
+
         return view('services.create')->with('category_types', $category_types);
     }
 
@@ -43,21 +44,18 @@ class ServicesController extends Controller
      */
     public function store(CreateServiceRequest $request)
     {
-
         DB::beginTransaction();
-        try{
-
+        try {
             $this->saveServices(new Services(), $request);
             DB::commit();
 
             return redirect()->route('services.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Store Data"], 500);
         }
-
     }
 
     /**
@@ -80,6 +78,7 @@ class ServicesController extends Controller
     public function edit(Services $service)
     {
         $category_types = CategoryType::get();
+
         return view('services.edit')->with(['service' => $service, 'category_types' => $category_types]);
     }
 
@@ -93,20 +92,18 @@ class ServicesController extends Controller
     public function update(CreateServiceRequest $request, Services $service)
     {
         DB::beginTransaction();
-        try{
-
+        try {
             $this->saveServices($service, $request);
 
             DB::commit();
 
             return redirect()->route('services.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Store Data"], 500);
         }
-
     }
 
     /**
@@ -119,8 +116,7 @@ class ServicesController extends Controller
     {
         DB::beginTransaction();
 
-        try{
-
+        try {
             $service->unlinkImage($service->banner);
 
             $service->products()->detach();
@@ -129,28 +125,25 @@ class ServicesController extends Controller
             DB::commit();
 
             return redirect()->route('services.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Delete Data"], 500);
         }
-
     }
 
     public function updateSequence(Request $request)
     {
-
         DB::beginTransaction();
 
-        try
-        {
-            foreach($request->input('sequence') as $sequence => $id) {
+        try {
+            foreach ($request->input('sequence') as $sequence => $id) {
                 $service = Services::find($id);
                 $service->sequence = $sequence + 1;
                 $service->save();
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             Log::error($e->getMessage());
             response(['status' => 'Cannot Update Sequence'], 500);
@@ -161,25 +154,24 @@ class ServicesController extends Controller
         return response(['message' => 'Updated Successfully'], 200);
     }
 
-
-     /**
+    /**
      * Create or Update the Services in storage
      *
-     * @param ServicesRequest $request
-     * @param Services $Services
+     * @param  ServicesRequest  $request
+     * @param  Services  $Services
      * @return Services
      */
     public function saveServices(Services $service, $request)
     {
         $image = $request->has('banner') ? $request->file('banner') : null;
-        $service->storeImage($image, ['width' => 230 , 'height' => 230]);
+        $service->storeImage($image, ['width' => 230, 'height' => 230]);
         $service->name = $request->input('name');
         $service->slug = str_slug($request->input('name'));
         $service->category_type_id = $request->input('category_type');
         $service->description = $request->input('description');
         $service->sequence = $service->sequence ?? Services::count() + 1;
         $service->save();
+
         return $service;
     }
-
 }

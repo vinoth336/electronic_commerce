@@ -25,5 +25,4 @@ class SiteInformation extends Model
     public $timestamps = true;
 
     protected $fillable = ['site_name', 'meta_description'];
-
 }

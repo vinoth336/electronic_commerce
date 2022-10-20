@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
@@ -13,6 +12,7 @@ class NewOrderSendNotificationToAdmin extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+
     public $userOrder;
 
     /**

@@ -23,7 +23,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
-use Psy\Util\Str;
 
 class ProductController extends Controller
 {
@@ -46,7 +45,6 @@ class ProductController extends Controller
      */
     public function create()
     {
-
         $services = $this->getServices()->orderBy('sequence')->get();
         $subCategories = SubCategory::orderBy('sequence')->get();
         $specifications = Specification::orderBy('name')->get();
@@ -57,14 +55,14 @@ class ProductController extends Controller
         $brands = Brand::get();
 
         return view('product.create', [
-            'services' => $services, 
-            'brands' => $brands, 
-            'subCategories' => $subCategories, 
+            'services' => $services,
+            'brands' => $brands,
+            'subCategories' => $subCategories,
             'specifications' => $specifications,
             'specificationValues' => $specificationValues,
             'features' => $features,
             'featureValues' => $featureValues,
-            'tags' => $tags]);
+            'tags' => $tags, ]);
     }
 
     /**
@@ -75,7 +73,6 @@ class ProductController extends Controller
      */
     public function store(CreateServiceRequest $request)
     {
-
         DB::beginTransaction();
         try {
             $this->saveProduct(new Product(), $request);
@@ -86,7 +83,8 @@ class ProductController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            return response(['status' => "Can't Store Data", "message" => $e->getMessage()], 500);
+
+            return response(['status' => "Can't Store Data", 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -122,7 +120,7 @@ class ProductController extends Controller
         $featureValues = FeatureValue::orderBy('name')->get();
         $productSpecifications = $product->product_specification_values()->with(['specifications', 'specification_values'])->orderBy('sequence')->get();
         $productFeatures = $product->product_feature_values()->with(['features', 'feature_values'])->orderBy('sequence')->get();
-        
+
         return view('product.edit')->with([
             'product' => $product,
             'services' => $services,
@@ -134,7 +132,7 @@ class ProductController extends Controller
             'featureValues' => $featureValues,
             'productSpecifications' => $productSpecifications,
             'productFeatures' => $productFeatures,
-            'tags' => $tags
+            'tags' => $tags,
         ]);
     }
 
@@ -149,7 +147,6 @@ class ProductController extends Controller
     {
         DB::beginTransaction();
         try {
-
             $this->saveProduct($product, $request);
 
             DB::commit();
@@ -158,6 +155,7 @@ class ProductController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Store Data"], 500);
         }
     }
@@ -173,8 +171,7 @@ class ProductController extends Controller
         DB::beginTransaction();
 
         try {
-
-            if($product->ProductImages()->count() > 0) {
+            if ($product->ProductImages()->count() > 0) {
                 foreach ($product->ProductImages as $ProductImage) {
                     $ProductImage->unlinkImage($ProductImage->image);
                 }
@@ -185,21 +182,22 @@ class ProductController extends Controller
 
             DB::commit();
 
-            return response(['status' => true, "message" => "Removed Successfully"], 200);
-        } catch(ModelNotFoundException $e) {
+            return response(['status' => true, 'message' => 'Removed Successfully'], 200);
+        } catch (ModelNotFoundException $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            return response(['status' => false, "message" => $e->getMessage()], 404);
+
+            return response(['status' => false, 'message' => $e->getMessage()], 404);
         } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            return response(['status' => false, "message" => $e->getMessage()], 500);
+
+            return response(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
     public function updateSequence(Request $request)
     {
-
         DB::beginTransaction();
 
         try {
@@ -219,12 +217,11 @@ class ProductController extends Controller
         return response(['message' => 'Updated Successfully'], 200);
     }
 
-
     /**
      * Create or Update the Product in storage
      *
-     * @param PortfolioImageRequest $request
-     * @param Product $Product
+     * @param  PortfolioImageRequest  $request
+     * @param  Product  $Product
      * @return Product
      */
     public function saveProduct($product, $request)
@@ -299,7 +296,6 @@ class ProductController extends Controller
 
     public function getServices()
     {
-
         return new Services;
     }
 
@@ -313,21 +309,18 @@ class ProductController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-            die($e->getMessage());
+            exit($e->getMessage());
             response(['status' => 'Cannot Import File'], 500);
         }
 
         return redirect()->route('product.index')->with('status', 'Imported Product List Successfully');
     }
 
-
-
     public function import_image(ImportProductImageRequest $request)
     {
-
         DB::beginTransaction();
         try {
-            $images = $request->file("product_images");
+            $images = $request->file('product_images');
             $action = $request->input('action');
             $n = 0;
             $imp = 0;
@@ -335,12 +328,12 @@ class ProductController extends Controller
             $productProcessed = [];
             foreach ($images as $image) {
                 $fileInfo = pathinfo($image->getClientOriginalName());
-                $fileDetail = explode("_",  $fileInfo['filename']);
+                $fileDetail = explode('_', $fileInfo['filename']);
                 $productCode = $fileDetail[0]; //Product Code
                 $product = Product::where('product_code', $productCode)->first();
                 if ($product) {
                     if ($product->ProductImages()->count() > 0) {
-                        if(in_array($action, ['override', 'override_update']) && !isset($productProcessed[$productCode])) {
+                        if (in_array($action, ['override', 'override_update']) && ! isset($productProcessed[$productCode])) {
                             foreach ($product->ProductImages as $ProductImage) {
                                 $ProductImage->unlinkImage($ProductImage->image);
                             }
@@ -349,12 +342,12 @@ class ProductController extends Controller
                         }
                     }
                     $insertFlag = 0;
-                    if($action == 'insert_for_no_image_record' && $product->ProductImages()->count() == 0) {
+                    if ($action == 'insert_for_no_image_record' && $product->ProductImages()->count() == 0) {
                         $insertFlag = 1;
-                    } elseif($action != 'insert_for_no_image_record') {
+                    } elseif ($action != 'insert_for_no_image_record') {
                         $insertFlag = 1;
                     }
-                    if($insertFlag) {
+                    if ($insertFlag) {
                         $portfolioImageCount = $product->ProductImages()->count() + 1;
                         $ProductImage = new ProductImage();
                         $ProductImage->storeImage($image, ['width' => 230, 'height' => 230]);
@@ -375,10 +368,11 @@ class ProductController extends Controller
             DB::commit();
 
             return redirect()->route('product.import', ['type' => 'product_image'])
-                ->with('status', 'Total Record : ' . count($images) . ',  Imported Image : ' . $imp . ', Not Matched record ' . $n . " - " . implode(",", $temp));
+                ->with('status', 'Total Record : '.count($images).',  Imported Image : '.$imp.', Not Matched record '.$n.' - '.implode(',', $temp));
         } catch (Exception $e) {
             DB::rollback();
-            die($e->getMessage());
+            exit($e->getMessage());
+
             return response(['status' => 'Cannot Import Images'], 500);
         }
     }
@@ -387,8 +381,7 @@ class ProductController extends Controller
     {
         $model = getModelName($model);
         $ids = [];
-        foreach ($values as $value) 
-        {
+        foreach ($values as $value) {
             $data = $model::firstOrCreate(['name' => $value]);
             $ids[] = (string) $data->id;
         }
@@ -396,9 +389,8 @@ class ProductController extends Controller
         return $ids;
     }
 
-    function export()
+    public function export()
     {
         return Excel::download(new ExportProductData, 'products.xlsx');
-
     }
 }

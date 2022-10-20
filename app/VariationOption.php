@@ -7,15 +7,14 @@ use Jamesh\Uuid\HasUuid;
 
 class VariationOption extends Model
 {
-    use HasUuid ;
+    use HasUuid;
 
     protected $fillable = ['name'];
 
     public function findOrCreateOptions($options)
     {
         $optionIds = [];
-        foreach ($options as $option) 
-        {
+        foreach ($options as $option) {
             $data = VariationOption::firstOrCreate(['name' => strtoupper($option)]);
             $optionIds[] = (string) $data->id;
         }

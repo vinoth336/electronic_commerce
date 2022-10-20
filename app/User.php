@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Auth\MustVerifyEmail as AuthMustVerifyEmail;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Jamesh\Uuid\HasUuid;
@@ -19,7 +18,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id', 'name', 'email', 'password', 'sex', 'city_id', 'state_id', 'zipcode', 'phone_no',
-        'address'
+        'address',
     ];
 
     /**
@@ -32,6 +31,7 @@ class User extends Authenticatable
     ];
 
     public $incrementing = false;
+
     protected $primaryKey = 'phone_no';
 
     /**
@@ -67,5 +67,4 @@ class User extends Authenticatable
     {
         return $this->is_active ? true : false;
     }
-
 }

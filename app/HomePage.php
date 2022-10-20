@@ -12,7 +12,6 @@ class HomePage extends Model
 
     protected $fillable = ['name', 'status', 'from_date', 'to_date', 'make_view'];
 
-
     public function renderRoute($toShow = 'home_page_container')
     {
         return route('home_pages.edit', ['home_page' => $this->id, 'to_show' => $toShow]);
@@ -22,5 +21,4 @@ class HomePage extends Model
     {
         return $this->hasMany(HomePageSection::class);
     }
-    
 }

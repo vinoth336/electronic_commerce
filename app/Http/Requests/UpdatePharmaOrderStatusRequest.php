@@ -24,7 +24,7 @@ class UpdatePharmaOrderStatusRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_status' => 'required|exists:order_statuses,id'
+            'order_status' => 'required|exists:order_statuses,id',
         ];
     }
 }

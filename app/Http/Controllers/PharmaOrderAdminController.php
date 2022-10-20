@@ -16,25 +16,23 @@ class PharmaOrderAdminController extends Controller
 
     public function index(Request $request)
     {
-
         $orders = PharmaPrescription::with(['user', 'order_status'])->OrderBy('created_at');
         if ($request->has('status')) {
-            if(!in_array($request->input('status'), ['All', 'all', ''])) {
+            if (! in_array($request->input('status'), ['All', 'all', ''])) {
                 $orders->where('order_status_id', $request->input('status'));
             }
         }
 
         if ($request->input('from_date') && $request->input('to_date')) {
-            $startDate = date("Y-m-d 00:00:00", strtotime($request->input('from_date')));
-            $endDate   = date("Y-m-d 23:59:59", strtotime($request->input('to_date')));
-            $orders->whereBetween("created_at", array($startDate, $endDate));
+            $startDate = date('Y-m-d 00:00:00', strtotime($request->input('from_date')));
+            $endDate = date('Y-m-d 23:59:59', strtotime($request->input('to_date')));
+            $orders->whereBetween('created_at', [$startDate, $endDate]);
         }
 
         $orderStatus = OrderStatus::orderBy('sequence')->get();
 
         return view('pharma_orders.list', ['orders' => $orders->get()])
-        ->with('orderStatus', $orderStatus)
-        ;
+        ->with('orderStatus', $orderStatus);
     }
 
     /**
@@ -56,6 +54,7 @@ class PharmaOrderAdminController extends Controller
     public function show(PharmaPrescription $pharma_order)
     {
         $pharma_order = $pharma_order->load(['user', 'order_status', 'prescription_details']);
+
         return $pharma_order;
     }
 
@@ -95,5 +94,4 @@ class PharmaOrderAdminController extends Controller
     {
         return redirect()->route('pharma_orders.index')->with('status', 'Removed Successfully');
     }
-
 }

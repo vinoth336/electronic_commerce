@@ -38,7 +38,6 @@ class SiteInformationController extends Controller
      */
     public function store(Request $request)
     {
-
         $siteInformation = SiteInformation::first();
         $siteInformation->site_name = $request->input('site_name');
         $siteInformation->meta_description = $request->input('meta_description');
@@ -54,14 +53,14 @@ class SiteInformationController extends Controller
         $image = $request->has('logo') ? $request->file('logo') : null;
         $siteInformation->storeImage($image);
         $favIcon = $request->has('fav_icon') ? $request->file('fav_icon') : null;
-        $storagePath = public_path('web/images/logo/') ;
+        $storagePath = public_path('web/images/logo/');
         $favIconStoragePathName = 'favicon.ico';
 
         //Unlink FavIcon
         if ($favIcon) {
             $siteInformation->unlinkImage($siteInformation->fav_icon);
-            if(move_uploaded_file($favIcon->getRealPath(), $storagePath . $favIconStoragePathName )) {
-                $siteInformation->fav_icon = $favIconStoragePathName;    
+            if (move_uploaded_file($favIcon->getRealPath(), $storagePath.$favIconStoragePathName)) {
+                $siteInformation->fav_icon = $favIconStoragePathName;
             } else {
                 $siteInformation->fav_icon = null;
             }
@@ -116,5 +115,4 @@ class SiteInformationController extends Controller
     {
         //
     }
-
 }

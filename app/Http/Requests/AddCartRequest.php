@@ -24,7 +24,7 @@ class AddCartRequest extends FormRequest
     public function rules()
     {
         return [
-            'qty' => 'required|numeric|min:1|max:500'
+            'qty' => 'required|numeric|min:1|max:500',
         ];
     }
 }

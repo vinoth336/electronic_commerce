@@ -8,7 +8,6 @@ use Jamesh\Uuid\HasUuid;
 
 class Testimonial extends Model
 {
-
     use StoreImage, HasUuid;
 
     protected $fileParamName = 'client_image';
@@ -21,8 +20,5 @@ class Testimonial extends Model
 
     protected $imageFieldName = 'client_image';
 
-
     protected $table = 'testimonials';
-
-
 }

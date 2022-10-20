@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdatePharmaOrderStatusRequest;
 use App\OrderStatus;
 use App\UserOrder;
-use PDF;
 use Illuminate\Http\Request;
+use PDF;
 
 class UserOrderAdminController extends Controller
 {
@@ -17,22 +17,21 @@ class UserOrderAdminController extends Controller
 
     public function index(Request $request)
     {
-
         $orders = UserOrder::with(['ordered_items' => function ($query) {
             $query->with(['product' => function ($query) {
                 $query->with('ProductImages');
             }]);
         }, 'order_status'])->orderBy('created_at', 'DESC');
         if ($request->has('status')) {
-            if (!in_array($request->input('status'), ['All', 'all', ''])) {
+            if (! in_array($request->input('status'), ['All', 'all', ''])) {
                 $orders->where('order_status_id', $request->input('status'));
             }
         }
 
         if ($request->input('from_date') && $request->input('to_date')) {
-            $startDate = date("Y-m-d 00:00:00", strtotime($request->input('from_date')));
-            $endDate   = date("Y-m-d 23:59:59", strtotime($request->input('to_date')));
-            $orders->whereBetween("created_at", array($startDate, $endDate));
+            $startDate = date('Y-m-d 00:00:00', strtotime($request->input('from_date')));
+            $endDate = date('Y-m-d 23:59:59', strtotime($request->input('to_date')));
+            $orders->whereBetween('created_at', [$startDate, $endDate]);
         }
 
         $orderStatus = OrderStatus::orderBy('sequence')->get();
@@ -59,7 +58,7 @@ class UserOrderAdminController extends Controller
      */
     public function show(UserOrder $userOrder)
     {
-        $order = $userOrder->load(['ordered_items'  => function ($query) {
+        $order = $userOrder->load(['ordered_items' => function ($query) {
             $query->with(['product' => function ($query) {
                 $query->with('ProductImages');
             }]);
@@ -70,7 +69,7 @@ class UserOrderAdminController extends Controller
             'userInfo' => $order->user,
             'orderItems' => $order->ordered_items,
             'orderStatus' => $orderStatus,
-            'order' => $order
+            'order' => $order,
         ]);
     }
 
@@ -120,8 +119,6 @@ class UserOrderAdminController extends Controller
         //return view('public.user.non_pharma_order_invoice', ['user' => $user, 'order' => $order]);
         $pdf = PDF::loadView('public.user.non_pharma_order_invoice', ['userDetail' => $user, 'order' => $order]);
 
-        return $pdf->download('Invoice_' . $order->order_no . '.pdf');
-
+        return $pdf->download('Invoice_'.$order->order_no.'.pdf');
     }
-
 }

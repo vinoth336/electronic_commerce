@@ -17,7 +17,7 @@ class ChangePasswordRequestController extends Controller
         'reset_password' => 'Reset Password',
         'password_changed' => 'Password Changed',
         'cancel' => 'Cancel',
-        'fake' => 'Fake'
+        'fake' => 'Fake',
     ];
 
     public function __construct()
@@ -34,22 +34,21 @@ class ChangePasswordRequestController extends Controller
     {
         $passwordRequest = CustomerChangePasswordRequest::with('user')->OrderBy('created_at');
         if ($request->has('status')) {
-            if (!in_array($request->input('status'), ['All', 'all', ''])) {
+            if (! in_array($request->input('status'), ['All', 'all', ''])) {
                 $passwordRequest->where('status', $request->input('status'));
             }
         }
 
         if ($request->has('request_type')) {
-            if (!in_array($request->input('request_type'), ['All', 'all', ''])) {
+            if (! in_array($request->input('request_type'), ['All', 'all', ''])) {
                 $passwordRequest->where('request_type', $request->input('request_type'));
             }
         }
 
-
         if ($request->input('from_date') && $request->input('to_date')) {
-            $startDate = date("Y-m-d 00:00:00", strtotime($request->input('from_date')));
-            $endDate   = date("Y-m-d 23:59:59", strtotime($request->input('to_date')));
-            $passwordRequest->whereBetween("created_at", array($startDate, $endDate));
+            $startDate = date('Y-m-d 00:00:00', strtotime($request->input('from_date')));
+            $endDate = date('Y-m-d 23:59:59', strtotime($request->input('to_date')));
+            $passwordRequest->whereBetween('created_at', [$startDate, $endDate]);
         }
 
         return view('forgot_password.list', ['CustomerChangePasswordRequest' => $passwordRequest->get(), 'request_status' => $this->status]);
@@ -73,7 +72,6 @@ class ChangePasswordRequestController extends Controller
      */
     public function show(CustomerChangePasswordRequest $changePasswordRequest)
     {
-
         $response = [
             'id' => $changePasswordRequest->id,
             'name' => $changePasswordRequest->user->name,
@@ -81,10 +79,10 @@ class ChangePasswordRequestController extends Controller
             'email' => $changePasswordRequest->user->email,
             'status' => $changePasswordRequest->status,
             'comment' => $changePasswordRequest->comment,
-            'created_at' => $changePasswordRequest->created_at
+            'created_at' => $changePasswordRequest->created_at,
         ];
 
-        return $response;;
+        return $response;
     }
 
     /**
@@ -112,7 +110,7 @@ class ChangePasswordRequestController extends Controller
         try {
             $changePasswordRequest->status = $request->input('status');
             $changePasswordRequest->comment = $request->input('comment');
-            if($changePasswordRequest->status == 'reset_password') {
+            if ($changePasswordRequest->status == 'reset_password') {
                 $user = $changePasswordRequest->user;
                 $user->password = Hash::make($user->phone_no);
                 $user->save();
@@ -128,7 +126,7 @@ class ChangePasswordRequestController extends Controller
             return response(['status' => false, 'message' => $e->getMessage()], SERVER_ERROR);
         }
 
-        return response(['message' => $message , 'status_value' => $this->status[$changePasswordRequest->status]], 200);
+        return response(['message' => $message, 'status_value' => $this->status[$changePasswordRequest->status]], 200);
     }
 
     /**
