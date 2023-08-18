@@ -24,10 +24,8 @@ class Banners extends Model
 
     public $timestamp = true;
 
-
-    public function getBannerFullPathAttribute($vale=null)
+    public function getBannerFullPathAttribute($vale = null)
     {
-        return asset('web/images/banners/' . $this->banner);
-
+        return asset('web/images/banners/'.$this->banner);
     }
 }

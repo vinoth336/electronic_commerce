@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class FaqsController extends Controller
 {
-
-
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +16,6 @@ class FaqsController extends Controller
      */
     public function index()
     {
-
         $faqs = Faqs::OrderBy('sequence')->get();
 
         return view('faqs.list', ['faqs' => $faqs]);
@@ -42,7 +39,6 @@ class FaqsController extends Controller
      */
     public function store(Request $request)
     {
-
         $faq = new Faqs();
         $faq->question = $request->input('question');
         $faq->answer = $request->input('answer');
@@ -50,7 +46,6 @@ class FaqsController extends Controller
         $faq->save();
 
         return redirect()->route('faqs.index')->with('status', 'Created Successfully');
-
     }
 
     /**
@@ -90,7 +85,6 @@ class FaqsController extends Controller
         $faq->save();
 
         return redirect()->route('faqs.index')->with('status', 'Created Successfully');
-
     }
 
     /**
@@ -115,17 +109,15 @@ class FaqsController extends Controller
      */
     public function updateSequence(Request $request)
     {
-
         DB::beginTransaction();
 
-        try
-        {
-            foreach($request->input('sequence') as $sequence => $id) {
+        try {
+            foreach ($request->input('sequence') as $sequence => $id) {
                 $faq = Faqs::find($id);
                 $faq->sequence = $sequence + 1;
                 $faq->save();
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             response('Cannot Update Sequence', 500);
         }

@@ -22,7 +22,6 @@ class HomePageSection extends Model
         return $this->normalizeContent($this->attributes['content']);
     }
 
-
     public function scopewhereHomePage($query, $homePageId)
     {
         return $this->where('home_page_id', $homePageId);

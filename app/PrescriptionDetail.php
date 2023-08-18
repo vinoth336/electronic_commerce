@@ -24,17 +24,15 @@ class PrescriptionDetail extends Model
 
     public function getCreatedAtAttribute($value)
     {
-        return date("d-m-Y", strtotime($value));
+        return date('d-m-Y', strtotime($value));
     }
 
     public function getImageUrlAttribute()
     {
-        if($this->attributes['image']) {
-            return secure_url(asset('web/images/prescriptions/' . $this->attributes['image']));
+        if ($this->attributes['image']) {
+            return secure_url(asset('web/images/prescriptions/'.$this->attributes['image']));
         }
 
         return null;
     }
-
-
 }

@@ -3,19 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\CustomerChangePasswordRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerForgotPasswordRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\User;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UserLoginController extends Controller
 {
-
     public function showLoginForm()
     {
         return view('public.auth.login');
@@ -26,18 +24,20 @@ class UserLoginController extends Controller
         if (Auth::guard('web')->attempt($request->only('phone_no', 'password'), $request->filled('remember'))) {
             //Authentication passed...
 
-           if(!auth()->user()->isActiveUser()) {
+            if (! auth()->user()->isActiveUser()) {
                 Auth::guard('web')->logout();
                 $request->session()->invalidate();
+
                 return $this->loginFailed('Your Account was Deactive, Please Contact Admin To Activate Your Account');
-           }
+            }
 
             $redirectTo = route('home');
-            if($request->has('redirectTo')) {
-                if($request->get('redirectTo') == 'checkout') {
+            if ($request->has('redirectTo')) {
+                if ($request->get('redirectTo') == 'checkout') {
                     $redirectTo = route('public.cart.checkout');
                 }
             }
+
             return redirect()
                  ->intended($redirectTo);
         }
@@ -50,11 +50,13 @@ class UserLoginController extends Controller
     {
         Auth::guard('web')->logout();
         $request->session()->invalidate();
+
         return redirect()
             ->route('home');
     }
 
-    private function loginFailed($msg = 'Login failed, please try again!'){
+    private function loginFailed($msg = 'Login failed, please try again!')
+    {
         return redirect()
             ->back()
             ->withInput()
@@ -78,26 +80,24 @@ class UserLoginController extends Controller
             return redirect()
             ->route('home')
             ->withInput()
-            ->with('login_success','Your Request Submitted Successfully');
-
-        } catch(Exception $e) {
+            ->with('login_success', 'Your Request Submitted Successfully');
+        } catch (Exception $e) {
             DB::rollback();
             Log::error($e->getMessage());
 
-            die('error' . $e->getMessage());
+            exit('error'.$e->getMessage());
+
             return redirect()
             ->route('home')
             ->with(['login_failed' => "Can't Process Request"], SERVER_ERROR);
         }
-
-
     }
 
     private function validator(Request $request)
     {
         //validation rules.
         $rules = [
-            'username'    => 'required|username|exists:members,username',
+            'username' => 'required|username|exists:members,username',
             'password' => 'required|string|min:4|max:255',
         ];
 

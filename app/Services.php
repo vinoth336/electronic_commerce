@@ -4,7 +4,6 @@ namespace App;
 
 use App\Traits\StoreImage;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Jamesh\Uuid\HasUuid;
 
@@ -22,18 +21,16 @@ class Services extends Model
 
     protected $imageFieldName = 'banner';
 
-    protected $table="services";
+    protected $table = 'services';
 
     protected $fillable = ['name', 'description', 'icon', 'banner', 'sequence', 'slug'];
 
     public $timestamps = true;
 
-
     public function products()
     {
         return $this->belongsToMany(Product::class);
     }
-
 
     public function category_type()
     {
@@ -42,23 +39,22 @@ class Services extends Model
 
     public function subcategories()
     {
-        return $this->hasMany(SubCategory::class, 'category_id', 'id');        
+        return $this->hasMany(SubCategory::class, 'category_id', 'id');
     }
 
     public static function boot()
     {
         parent::boot();
 
-        static::created(function() {
+        static::created(function () {
             setSiteMenuValueInCache(getSiteMenus());
         });
 
-        static::updated(function() {
+        static::updated(function () {
             setSiteMenuValueInCache(getSiteMenus());
         });
-        static::deleted(function() {
+        static::deleted(function () {
             setSiteMenuValueInCache(getSiteMenus());
         });
-
     }
 }

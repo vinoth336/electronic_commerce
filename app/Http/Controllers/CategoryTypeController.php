@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryTypeController extends Controller
 {
-
-
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +16,6 @@ class CategoryTypeController extends Controller
      */
     public function index()
     {
-
         $category_types = CategoryType::OrderBy('sequence')->get();
 
         return view('category_types.list', ['category_types' => $category_types]);
@@ -42,14 +39,12 @@ class CategoryTypeController extends Controller
      */
     public function store(Request $request)
     {
-
         $category_type = new CategoryType();
         $category_type->name = $request->input('name');
         $category_type->sequence = CategoryType::get()->count();
         $category_type->save();
 
         return redirect()->route('category_types.index')->with('status', 'Created Successfully');
-
     }
 
     /**
@@ -111,17 +106,15 @@ class CategoryTypeController extends Controller
      */
     public function updateSequence(Request $request)
     {
-
         DB::beginTransaction();
 
-        try
-        {
-            foreach($request->input('sequence') as $sequence => $id) {
+        try {
+            foreach ($request->input('sequence') as $sequence => $id) {
                 $category_type = CategoryType::find($id);
                 $category_type->sequence = $sequence + 1;
                 $category_type->save();
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             response('Cannot Update Sequence', 500);
         }

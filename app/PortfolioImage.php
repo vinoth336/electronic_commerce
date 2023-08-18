@@ -24,7 +24,6 @@ class ProductImage extends Model
 
     public function getProductImageAttribute()
     {
-        return asset('web/images/product_images/thumbnails/') . "/" . $this->image;
+        return asset('web/images/product_images/thumbnails/').'/'.$this->image;
     }
-
 }

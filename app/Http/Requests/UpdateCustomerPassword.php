@@ -26,7 +26,7 @@ class UpdateCustomerPassword extends FormRequest
         return [
             'current_password' => 'required',
             'new_password' => 'required|min:6',
-            'confirm_password' => 'required|same:new_password'
+            'confirm_password' => 'required|same:new_password',
         ];
     }
 }

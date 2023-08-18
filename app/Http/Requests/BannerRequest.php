@@ -25,7 +25,7 @@ class BannerRequest extends FormRequest
     {
         return [
             'banner_size' => 'required|numeric|between:3,12',
-            'banner' => 'image|sometimes|mimes:jpeg,png,jpg,gif|max:2048'
+            'banner' => 'image|sometimes|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

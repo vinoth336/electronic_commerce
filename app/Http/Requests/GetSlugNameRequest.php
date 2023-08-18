@@ -24,7 +24,7 @@ class GetSlugNameRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:190'
+            'name' => 'required|string|max:190',
         ];
     }
 }

@@ -2,11 +2,9 @@
 
 namespace App;
 
-use App\Mail\SendOrderNotificationToAdmin;
 use App\Traits\StoreImage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Mail;
 use Jamesh\Uuid\HasUuid;
 
 class PharmaPrescription extends Model
@@ -25,16 +23,15 @@ class PharmaPrescription extends Model
 
     public $resize = false;
 
-
     public function getCreatedAtAttribute($value)
     {
-        return date("d-m-Y", strtotime($value));
+        return date('d-m-Y', strtotime($value));
     }
 
     public function getImageUrlAttribute()
     {
-        if($this->attributes['image']) {
-            return secure_url(asset('web/images/prescriptions/' . $this->attributes['image']));
+        if ($this->attributes['image']) {
+            return secure_url(asset('web/images/prescriptions/'.$this->attributes['image']));
         }
 
         return null;

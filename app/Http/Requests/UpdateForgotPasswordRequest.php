@@ -25,7 +25,7 @@ class UpdateForgotPasswordRequest extends FormRequest
     {
         return [
             'status' => 'required',
-            'comment' => 'required|max:500'
+            'comment' => 'required|max:500',
         ];
     }
 }

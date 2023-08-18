@@ -27,7 +27,7 @@ class VariationAttributeRequest extends FormRequest
 
         return [
             'name' => 'required|string',
-            'slug_name' => "required|unique:variations,slug_name,{$variationId},id"
+            'slug_name' => "required|unique:variations,slug_name,{$variationId},id",
         ];
     }
 }

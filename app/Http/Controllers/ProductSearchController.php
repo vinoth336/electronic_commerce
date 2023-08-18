@@ -3,22 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Brand;
-use App\CategoryType;
 use App\Product;
 use App\Services;
 use App\SubCategory;
 use Illuminate\Http\Request;
-use Mockery\Matcher\Subset;
 
 class ProductSearchController extends Controller
 {
     //
 
-
     public function index(Request $request)
     {
-
-
         $categories = Services::get();
         $subCategories = SubCategory::get();
         $brands = Brand::get();
@@ -30,11 +25,8 @@ class ProductSearchController extends Controller
             ->with('products', $products)
             ->with('brands', $brands)
             ->with('subCategories', $subCategories)
-            ->with('input', $input)
-            ;
-        ;
+            ->with('input', $input);
     }
-
 
     public function getProducts(Request $request, $renderPage = true)
     {
@@ -45,58 +37,55 @@ class ProductSearchController extends Controller
         return $products->select('products.*')->orderBy('price', $sortBy)->get();
     }
 
-
     public function addWhereCondition($request, $products)
     {
-
-        if($request->has('q')) {
+        if ($request->has('q')) {
             $searchQuery = $request->get('q');
-            $products->where('name', 'like' , "%{$searchQuery}%")
+            $products->where('name', 'like', "%{$searchQuery}%")
             ->orWhere('slug', $searchQuery)
             ->orWhere('description', 'like', "%{$searchQuery}%");
         }
 
-        if($request->has('categories')) {
-            $products->join('product_services', function($join) use($request, $products){
+        if ($request->has('categories')) {
+            $products->join('product_services', function ($join) use ($request) {
                 $join->on('product_services.product_id', '=', 'products.id');
                 $categories = filterRemoveEmptyValues($request->input('categories'));
-                if($categories != '') {
-                    $join->join('services', function($service_join) use($request, $categories){
+                if ($categories != '') {
+                    $join->join('services', function ($service_join) use ($categories) {
                         $service_join->on('services.id', '=', 'product_services.services_id');
-                        if(is_array($categories)) {
+                        if (is_array($categories)) {
                             $service_join->whereIn('services.slug', $categories);
-                        }else {
+                        } else {
                             $service_join->where('services.slug', '=', $categories);
                         }
                         $service_join->on('product_services.services_id', '=', 'services.id');
                     });
-
                 }
             });
         }
 
-        if($request->has('sub_categories')) {
+        if ($request->has('sub_categories')) {
             $sub_categories = filterRemoveEmptyValues($request->input('sub_categories'));
-            if($sub_categories) {
-                $products->join('sub_categories', function($join) use($sub_categories){
+            if ($sub_categories) {
+                $products->join('sub_categories', function ($join) use ($sub_categories) {
                     $join->on('sub_categories.id', '=', 'products.sub_category_id');
-                    if(is_array($sub_categories)) {
+                    if (is_array($sub_categories)) {
                         $join->whereIn('sub_categories.slug_name', $sub_categories);
-                    }else {
+                    } else {
                         $join->where('sub_categories.slug_name', '=', $sub_categories);
                     }
                 });
             }
         }
 
-        if($request->has('brands')) {
+        if ($request->has('brands')) {
             $brands = filterRemoveEmptyValues($request->input('brands'));
-            if($brands) {
-                $products->join('brands', function($join) use($brands){
+            if ($brands) {
+                $products->join('brands', function ($join) use ($brands) {
                     $join->on('brands.id', '=', 'products.brand_id');
-                    if(is_array($brands)) {
+                    if (is_array($brands)) {
                         $join->whereIn('brands.slug', $brands);
-                    }else {
+                    } else {
                         $join->where('brands.slug', '=', $brands);
                     }
                 });
@@ -104,15 +93,14 @@ class ProductSearchController extends Controller
         }
 
         return $products;
-
     }
 
     public function searchProduct(Request $request)
     {
         $searchQuery = $request->get('q');
 
-        if($searchQuery) {
-            $products = Product::activeProject()->where('name', 'like' , "%{$searchQuery}%")
+        if ($searchQuery) {
+            $products = Product::activeProject()->where('name', 'like', "%{$searchQuery}%")
             ->orWhere('description', 'like', "%{$searchQuery}%")
             ->limit(10)->get();
         } else {
@@ -120,8 +108,8 @@ class ProductSearchController extends Controller
         }
 
         $response = [];
-        foreach($products as $product) {
-            $response[] = array('value' => $product->slug, 'label' => ucwords($product->name));
+        foreach ($products as $product) {
+            $response[] = ['value' => $product->slug, 'label' => ucwords($product->name)];
         }
 
         return response()->json($response);

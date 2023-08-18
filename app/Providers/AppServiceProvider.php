@@ -4,13 +4,12 @@ namespace App\Providers;
 
 use App\Brand;
 use App\Services;
-use App\SiteInformation;
 use App\SubCategory;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,33 +30,30 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        if(env('APP_ENV') != 'production') {
+        if (env('APP_ENV') != 'production') {
             DB::listen(
                 function ($query) {
                     Log::info(
                         [
-                            "Query" => $query->sql,
-                            "Bindings" => $query->bindings,
-                            "Time" => $query->time
+                            'Query' => $query->sql,
+                            'Bindings' => $query->bindings,
+                            'Time' => $query->time,
                         ]
                     );
                 });
         }
 
-
         View::composer('*', function ($view) {
-
-            if (!Cache::has('site_information')) {
+            if (! Cache::has('site_information')) {
                 setSiteInformationInCache();
             }
-            if (!Cache::has('site_menu_items')) {
+            if (! Cache::has('site_menu_items')) {
                 setSiteMenuValueInCache(getSiteMenus());
             }
-            if (!Cache::has('cart_settings')) {
+            if (! Cache::has('cart_settings')) {
                 setCartSettings(getCartSettings());
             }
-            if (!Cache::has('email_notification')) {
+            if (! Cache::has('email_notification')) {
                 setMailNotificationDetailsInCache();
             }
             $siteInformation = Cache::get('site_information');
