@@ -132,6 +132,23 @@ class HomePageController extends Controller
         return view('home_page.section_banner');
     }
 
+    public function loadSection(Request $request, HomePage $homePage)
+    {
+        $sectionName = $request->sectionName ?? null;
+        if ($sectionName == 'tags')
+        {
+            $tags = Tag::with('product_tags')->get();
+
+            return view('home_page.section_tags', ['tags' => $tags, 'homePage' => $homePage]);
+        } elseif($sectionName == 'banner') {
+            return view('home_page.section_banner');
+        } elseif ($sectionName == 'slider') {
+            return view('home_page.section_main_slider');
+        }
+
+
+    }
+
 
     public function renderContent(Request $request, HomePage $homePage)
     {

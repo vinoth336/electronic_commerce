@@ -21,11 +21,11 @@
                     <i class="material-icons">email</i>
                   </span>
                 </div>
-                <input type="email" name="email" class="form-control" placeholder="{{ __('Email...') }}" value="{{ old('email', 'admin@material.com') }}" required>
+                <input type="text" name="username" class="form-control" placeholder="{{ __('Enter Email ID/ Phone Number') }}" value="{{ old('username', '') }}" required>
               </div>
-              @if ($errors->has('email'))
+              @if ($errors->has('username'))
                 <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
-                  <strong>{{ $errors->first('email') }}</strong>
+                  <strong>{{ $errors->first('username') }}</strong>
                 </div>
               @endif
             </div>

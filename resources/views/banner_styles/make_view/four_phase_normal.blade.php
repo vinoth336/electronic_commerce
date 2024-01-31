@@ -16,8 +16,24 @@
                 @while ($i <= 3)
                     <div class="oc-item text-center" style="height: 330px;margin-top: 10px">
                         @if ($bannerInfo)
-                            <a class="grid-inner d-block h-100 rounded-edge-15">
+                            <a class="grid-inner d-block h-100 rounded-edge-15"
+
+                                    @if(isset($bannerInfo['target_url']))
+                                        href="{{ $bannerInfo['target_url'] }}"
+                                    @endif
+                                >
                                 <img src="{{ $bannerInfo[$i]['banner_image'] }}" style="width: 100%;height:100%" />
+                                @if(isset($bannerInfo['title']))
+                                    <div>
+                                        {{ $bannerInfo['title'] }}
+                                    </div>
+                                @endif
+                                @if(isset($bannerInfo['description']))
+                                    <div>
+                                        {{ $bannerInfo['description'] }}
+                                    </div>
+                                @endif
+
                             </a>
                         @endif
                     </div>

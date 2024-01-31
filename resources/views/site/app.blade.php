@@ -5,7 +5,7 @@
 
     @php
         $isHomePage = $page ?? false;
-        
+
         if ($productDetail ?? false) {
             $description = $productDetail->description ?? $productDetail->name . ' Rs ' . number_format($productDetail->actual_price, 2);
         } else {
@@ -123,7 +123,7 @@
 
                         <!-- Logo
       ============================================= -->
-                        <div id="logo" class="" style="border:none">
+                        <div id="logo" class="" style="border:none;margin-right: 0px;">
                             <a href="{{ route('home') }}" class="standard-logo"
                                 data-dark-logo="{{ asset('web/images/logo/' . $siteInformation->logo) }}">
                                 <img src="{{ asset('web/images/logo/' . $siteInformation->logo) }}"
@@ -134,14 +134,17 @@
                                     alt="{{ config('app.name') }}" style="height: 25px !important;">
                             </a>
                         </div>
-                        <div class="search-container d-none d-md-block d-lg-block" style="width: 75%; margin: auto">
-						<form action="/search" method="get"  style="margin-bottom: 0px">
-                            <input id="product_search_box1" style="" class="form-control product_search_box" type="text"
-                                placeholder="Search For Product, Brand, Category" name="q">
-						</form>
+
+
+                        <div class="search-container d-none d-md-block d-lg-block" style="width: 50%;">
+                            <form action="/search" method="get"  style="margin-bottom: 0px">
+                                <input id="psearch-container d-none d-md-block d-lg-blocksearch-container d-none d-md-block d-lg-blockroduct_search_box1" style="" class="form-control product_search_box" type="text"
+                                    placeholder="Search For Product, Brand, Category" name="q">
+                            </form>
                         </div>
-                        
-                        <div class="header-misc mobile-ml-auto" >
+
+
+                        <div class="header-misc" style="text-align:right" >
 							@guest
 								<div class="">
 									<a href="#" class="menu-link user_login" data-toggle="modal" data-target=".show-login-modal"
@@ -151,8 +154,11 @@
 								</div>
                         	@endguest
                             <div id="top-cart" class="header-misc-icon d-sm-block">
-                                <a href="#" id="top-cart-trigger"><i class="icon-line-bag"></i><span
-                                        class="top-cart-number" id="top-cart-number"></span>
+                                <a href="#" id="top-cart-trigger">
+                                    <i class="icon-shopping-cart1"></i>
+                                    @if(false)
+                                    <span class="top-cart-number" id="top-cart-number"></span>
+                                    @endif
                                 </a>
                                 <div class="top-cart-content">
                                     <div class="top-cart-title">
@@ -205,33 +211,7 @@
                                         </ul>
                                     </li>
                                 @endforeach
-                                {{-- <li class="page-menu-item"><a href="#">
-                                        <div>Features</div>
-                                    </a></li>
-                                <li class="page-menu-item"><a href="#">
-                                        <div>Models</div>
-                                    </a></li>
-                                <li class="page-menu-item"><a href="#">
-                                        <div>Reviews</div>
-                                    </a>
-                                    <ul class="page-menu-sub-menu">
-                                        <li class="page-menu-item"><a href="#">
-                                                <div>Expert Reviews</div>
-                                            </a></li>
-                                        <li class="page-menu-item"><a href="#">
-                                                <div>User Reviews</div>
-                                            </a></li>
-                                    </ul>
-                                </li>
-                                <li class="page-menu-item"><a href="#">
-                                        <div>Compare</div>
-                                    </a></li>
-                                <li class="page-menu-item"><a href="#">
-                                        <div>Build</div>
-                                    </a></li>
-                                <li class="page-menu-item"><a href="#">
-                                        <div>Order</div>
-                                    </a></li> --}}
+
                             </ul>
                         </nav>
                         <div id="page-menu-trigger" class="ml-auto"><i class="icon-reorder"></i></div>

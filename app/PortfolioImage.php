@@ -6,7 +6,7 @@ use App\Traits\StoreImage;
 use Illuminate\Database\Eloquent\Model;
 use Jamesh\Uuid\HasUuid;
 
-class ProductImage extends Model
+class PortfolioImage extends Model
 {
     use StoreImage, HasUuid;
 

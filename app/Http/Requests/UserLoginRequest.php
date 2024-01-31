@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\LoginUsernameFormat;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserLoginRequest extends FormRequest
@@ -24,7 +25,7 @@ class UserLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_no' => 'required|numeric|regex:/[0-9]{10}/|exists:users,phone_no',
+            'username' => ['required', new LoginUsernameFormat],
             'password' => 'required|min:6'
         ];
     }

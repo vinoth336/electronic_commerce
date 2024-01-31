@@ -217,7 +217,7 @@
                     return false;
 
                 $.ajax({
-                    "url" : "load/" + sectionType + "/section",
+                    "url" : "load/" + sectionType + "/load_section",
                     "type" : "get",
                     "success" : function(data) {
                             $("#section_content").html(data);

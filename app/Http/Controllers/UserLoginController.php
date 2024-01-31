@@ -23,7 +23,10 @@ class UserLoginController extends Controller
 
     public function login(UserLoginRequest $request)
     {
-        if (Auth::guard('web')->attempt($request->only('phone_no', 'password'), $request->filled('remember'))) {
+
+
+        $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_no';
+        if (Auth::guard('web')->attempt([$fieldType => $request->username, 'password' => $request->password], $request->filled('remember'))) {
             //Authentication passed...
 
            if(!auth()->user()->isActiveUser()) {
@@ -103,5 +106,42 @@ class UserLoginController extends Controller
 
         //validate the request.
         $request->validate($rules);
+    }
+
+	
+    public function showOtpVerify(Request $request)
+    {
+        return view('public.user.phone_number_verify', ['user' => auth()->user()]);
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'verify_otp' => 'required|string|min:6|max:6'
+        ]);
+
+        try {
+            $user = auth()->user();
+
+            if ($user->verifyOtp($request->verify_otp)) {
+
+                return redirect()->route('public.dashboard');
+            } else {
+
+                return redirect()->route('public.show_otp_verify')->withErrors(['verify_otp' => 'Please Enter Valid OTP.']);
+            }
+
+        } catch (Exception $exception) {
+
+        }
+    }
+
+    public function sendOtp(Request $request)
+    {
+        $user = auth()->user();
+        $user->sendOtp();
+
+        return response(['status' => SUCCESS, 'message' => 'OTP sent to your registered mobile number. Kindly check it.']);
+
     }
 }

@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Notifications\SendAccountVerificationOtp;
+use App\Notifications\SendSmsNotification;
 use Illuminate\Auth\MustVerifyEmail as AuthMustVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Jamesh\Uuid\HasUuid;
 
 class User extends Authenticatable
@@ -68,4 +71,47 @@ class User extends Authenticatable
         return $this->is_active ? true : false;
     }
 
+    public function otpSent()
+    {
+        return DB::table('manage_user_otp')->select('otp')->where('user_id', $this->id)->latest()->first();
+    }
+
+    public function isPhoneNumberVerified()
+    {
+        return $this->is_phone_number_verified ? true : false;
+    }
+    public function verifyOtp($otp)
+    {
+        if (!$this->isPhoneNumberVerified() && (optional($this->otpSent()))->otp == $otp) {
+            $this->is_phone_number_verified = true;
+            $this->save();
+
+            return true;
+        } elseif($this->isPhoneNumberVerified()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function sendOtp()
+    {
+        $this->generateOtp();
+
+        $this->notify(new SendAccountVerificationOtp($this));
+    }
+
+    public function generateOtp()
+    {
+        DB::table('manage_user_otp')->insert([
+            'user_id' => $this->id,
+            'otp' => generate_otp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+    }
+
+    public function routeNotificationForMsg91 ($notification) {
+        return $this->phone_no;
+    }
 }

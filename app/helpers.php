@@ -152,3 +152,8 @@ function bannerIsEditMode($mode, $targetClassName)
     {
         return json_encode($values, true);
     }
+
+    function generate_otp()
+    {
+        return rand(100000, 999999);
+    }

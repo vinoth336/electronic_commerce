@@ -123,6 +123,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'account_verification_required_in' => explode(",", env('ACCOUNT_VERIFICATION_REQUIRED_IN', 'mail')),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

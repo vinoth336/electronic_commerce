@@ -63,13 +63,21 @@ class HomePageSectionController extends Controller
             } elseif($request->input('section_type') == 'banner') {
                 $bannerImages = $request->file('images');
                 $bannerIds = $request->input('banner_ids');
+                $bannerTitle = $request->input('banner_title');
+                $bannerDescription = $request->input('banner_description');
+                $bannerTargetUrls = $request->input('target_urls');
                 $banner_info = [];
 
                 foreach($bannerImages as $key => $image) {
                     $bannerId = $bannerIds[$key] ?? null;
                     $banner = $this->createBanner($image, $bannerId);
                     $bannerIds[$key] = $banner->id;
-                    $banner_info[$key] = ['bannerId' => $banner->id, 'banner_image' => $banner->banner_full_path];
+                    $bannerIds[$key] = $banner->id;
+                    $banner_info[$key] = [
+                        'bannerId' => $banner->id, 'banner_image' => $banner->banner_full_path,
+                        'title' => $bannerTitle[$key] ?? "", 'description' => $bannerDescription[$key] ?? "",
+                        'target_url' => $bannerTargetUrls[$key] ?? ""
+                        ];
                 }
 
                 $requestData = $request->all();
@@ -169,7 +177,9 @@ class HomePageSectionController extends Controller
                 $bannerIds = $request->input('banner_ids');
                 $bannerContent = $homePageSection->content;
                 $banner_info = [];
-             
+                $bannerTitle = $request->input('banner_title');
+                $bannerDescription = $request->input('banner_description');
+                $bannerTargetUrls = $request->input('target_urls');
                 //Set Old Values
                 foreach($bannerIds as $key => $bannerId) {
                     $banner_info[$key] = $bannerContent->banner_info[$key];
@@ -181,7 +191,11 @@ class HomePageSectionController extends Controller
                         $bannerId = $bannerIds[$key] ?? null;
                         $banner = $this->createBanner($image, $bannerId);
                         $bannerIds[$key] = $banner->id;
-                        $banner_info[$key] = ['bannerId' => $banner->id, 'banner_image' => $banner->banner_full_path];
+                        $banner_info[$key] = [
+                            'bannerId' => $banner->id, 'banner_image' => $banner->banner_full_path,
+                            'title' => $bannerTitle[$key] ?? "", 'description' => $bannerDescription[$key] ?? "",
+                            'target_url' => $bannerTargetUrls[$key] ?? ""
+                        ];
                     }
                 }
                 $requestData = $request->all();

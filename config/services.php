@@ -29,5 +29,8 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'msg91' => [
+        'key' => '405613ALCznVo9M651a43e7P1'
+    ]
 
 ];

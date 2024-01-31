@@ -21,10 +21,11 @@
                             <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                 <select
                                     class="selectpicker form-control{{ $errors->has('variationOption') ? ' is-invalid' : '' }}"
-                                    name="section_type" id="input-section_type" onchange="PageSectionManager.loadSection(this.value)">
+                                    name="" id="input-section_type" onchange="PageSectionManager.loadSection(this.value)">
                                     <option value="">Select Section</option>
                                     <option value="banner" @if (old('section_type') == 'banner') selected @endif>Banner</option>
                                     <option value="tags" @if (old('section_type') == 'tags') selected @endif>Tags</option>
+                                    <option value="tags" @if (old('section_type') == 'main_slider') selected @endif>Main Slider</option>
                                 </select>
                                 @if ($errors->has('section_type'))
                                     <span id="section_type-error" class="error text-danger"

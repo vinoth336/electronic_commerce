@@ -123,9 +123,11 @@ class UserRegistrationController extends Controller
         DB::beginTransaction();
         try{
             $email = decrypt($hash);
-            $memberRegistrationRequest = User::findOrFail($email);
+            $memberRegistrationRequest = User::where('email', $email)->firstOrFail();
             if(!$memberRegistrationRequest->email_verified_at) {
                 $memberRegistrationRequest->email_verified_at = now();
+                $memberRegistrationRequest->is_phone_number_verified = true;
+
                 $memberRegistrationRequest->save();
 
                 DB::commit();

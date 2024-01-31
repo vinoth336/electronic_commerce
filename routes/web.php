@@ -1,6 +1,7 @@
 <?php
 
 //use Illuminate\Support\Facades\Auth;
+use App\SiteInformation;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'SiteController@index')->name('home');
+Route::get('/', function() {
+
+    return view('site.test_page', [
+        'siteInformation' => SiteInformation::first()
+    ]);
+})->name('home');
+
+//Route::get('/', 'SiteController@index')->name('home');
 Route::get('/service/{slug?}', 'SiteController@services')->name('service');
 Route::get('/product/', 'SiteController@product')->name('product');
 Route::get('/faqs/', 'SiteController@faqs')->name('site_faqs');
@@ -43,7 +51,14 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 Route::get('/cart/checkout/', 'CartController@checkout')->name('public.cart.checkout');
-Route::group(['middleware' => 'auth:web'], function() {
+
+Route::group(['middleware' => ['auth:web']], function() {
+    Route::get('/user/account_verify', 'UserLoginController@showOtpVerify')->name('public.show_otp_verify');
+    Route::post('/user/account_verify', 'UserLoginController@verifyOtp');
+    Route::post('/user/send_otp', 'UserLoginController@sendOtp')->name('public.send_otp');
+});
+
+Route::group(['middleware' => ['auth:web', 'is_account_verified']], function() {
     Route::get('dashboard', 'UserController@dashboard')->name('public.dashboard');
     Route::get('change_password', 'UserController@changePassword')->name('public.change_password');
     Route::post('change_password', 'UserController@updatePassword');
@@ -112,8 +127,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::resource('home_pages', 'HomePageController');
 
         #HOME PAGE SECTION MANAGER
-        Route::get('home_pages/{homePage}/load/tags/section', 'HomePageController@loadTagSection')->name('load_section');
-        Route::get('home_pages/{homePage}/load/banner/section', 'HomePageController@loadBannerSection')->name('load_section');
+        #Route::get('home_pages/{homePage}/load/tags/section', 'HomePageController@loadTagSection')->name('load_section');
+        #Route::get('home_pages/{homePage}/load/banner/section', 'HomePageController@loadBannerSection')->name('load_section');
+        Route::get('home_pages/{homePage}/load/{sectionName}/load_section', 'HomePageController@loadSection')->name('load_section');
         Route::get('home_pages/{homePage}/add_section', 'HomePageSectionController@create')->name('home_page_add_section');
         Route::post('home_pages/{homePage}/save_section', 'HomePageSectionController@storeSection')->name('home_page_save_section');
         Route::get('home_pages/{homePage}/make_default', 'HomePageController@makeDefault')->name('home_pages.make_default');

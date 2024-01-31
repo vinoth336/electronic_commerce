@@ -181,6 +181,7 @@ class ProductController extends Controller
                 $product->ProductImages()->delete();
             }
             $product->services()->detach();
+            $product->product_tags()->detach();
             $product->delete();
 
             DB::commit();
