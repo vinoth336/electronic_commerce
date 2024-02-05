@@ -14,9 +14,13 @@ class AdminUser extends Authenticatable
 
     protected $guard = 'admin_users';
 
-    protected $redirectTo = '/admin/home';
-
     protected $table = 'admin_users';
 
     protected $fillable = ['email', 'name'];
+
+
+    public function getAuthIdentifierName()
+    {
+        return 'email';
+    }
 }

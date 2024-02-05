@@ -40,11 +40,34 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('login');
     }
 
     protected function guard($name = null)
     {
         return Auth::guard('admin_users');
+    }
+
+
+    public function login(Request $request)
+    {
+        if (Auth::guard('admin_users')->attempt(['email' => $request->input('username'),
+            'password' => $request->input("password")], $request->filled('remember'))) {
+            //Authentication passed...
+            return redirect()
+                ->intended(route('admin.dashboard'))
+                ->with('status', 'You are Logged in Successfully');
+        }
+
+        //Authentication failed...
+        return $this->loginFailed();
+    }
+
+    private function loginFailed(){
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error','Login failed, please try again!');
     }
 
     /**

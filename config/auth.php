@@ -75,10 +75,12 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+            'redirectTo' => '/login'
         ],
         'admin_users' => [
             'driver' => 'eloquent',
             'model' => App\AdminUser::class,
+            'redirectTo' => '/admin/login'
         ],
 
         // 'users' => [
