@@ -19,6 +19,5 @@ storage/*.key
 .env
 Homestead.yaml
 Homestead.json
-public/web
 /.vagrant
 .phpunit.result.cache
