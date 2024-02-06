@@ -26,7 +26,7 @@ class SliderRequest extends FormRequest
         return [
             'description' => 'nullable',
             'font_color' => 'nullable',
-            'slider' => 'image|sometimes|mimes:jpeg,png,jpg,gif|max:2048'
+            'slider' => 'image|sometimes|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

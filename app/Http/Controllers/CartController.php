@@ -28,8 +28,8 @@ class CartController extends Controller
     public function getCartItems()
     {
         $user = auth()->user();
-        $items =  $user->cart()->with( ["product" => function($query) {
-            $query->with('ProductImages')   ;
+        $items = $user->cart()->with(['product' => function ($query) {
+            $query->with('ProductImages');
         }])->get();
 
         return $items;
@@ -37,19 +37,17 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
-        return view('site.checkout')->with('redirectTo' , 'checkout');
+        return view('site.checkout')->with('redirectTo', 'checkout');
     }
 
     public function store(AddCartRequest $request, Product $product)
     {
-
         DB::beginTransaction();
         try {
-
             $user = auth()->user();
             $cart = Cart::firstOrCreate([
                 'user_id' => $user->id,
-                'product_id' => $product->id
+                'product_id' => $product->id,
             ]);
             $cart->qty = $request->input('qty');
             $cart->status = true;
@@ -144,12 +142,12 @@ class CartController extends Controller
         try {
             $products = $request->input('items');
             $user = auth()->user();
-            foreach($products as $slug  => $cartInfo) {
+            foreach ($products as $slug => $cartInfo) {
                 $product = Product::where('slug', $slug)->first();
-                if($product) {
+                if ($product) {
                     $cart = Cart::firstOrCreate([
                         'user_id' => $user->id,
-                        'product_id' => $product->id
+                        'product_id' => $product->id,
                     ]);
                     $cart->qty = $cartInfo['qty'] <= 0 ? 1 : $cartInfo['qty'];
                     $cart->status = $cartInfo['status'] == 'true' ? 1 : 0;
@@ -159,13 +157,11 @@ class CartController extends Controller
             DB::commit();
 
             return CartItemListResponse::collection($this->getCartItems());
-
         } catch (Exception $e) {
             DB::rollback();
             info($e->getMessage());
 
             return response("Can't Process, Please Contact Admin", 500);
         }
-
     }
 }

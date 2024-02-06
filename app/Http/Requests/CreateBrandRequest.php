@@ -24,10 +24,11 @@ class CreateBrandRequest extends FormRequest
     public function rules()
     {
         $id = $this->brand->id ?? null;
+
         return [
             'name' => "required|unique:brands,name,{$id},id,deleted_at,NULL",
             'status' => 'required',
-            'banner' => 'image|nullable|mimes:jpeg,png,jpg,gif|max:2048'
+            'banner' => 'image|nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

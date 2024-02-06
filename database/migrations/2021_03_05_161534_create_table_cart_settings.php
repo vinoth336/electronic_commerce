@@ -15,8 +15,8 @@ class CreateTableCartSettings extends Migration
     {
         Schema::create('cart_settings', function (Blueprint $table) {
             $table->id();
-            $table->decimal('min_home_delivery_order_amount',10, 2);
-            $table->decimal('min_shop_pickup_order_amount',10, 2);
+            $table->decimal('min_home_delivery_order_amount', 10, 2);
+            $table->decimal('min_shop_pickup_order_amount', 10, 2);
             $table->timestamps();
         });
     }

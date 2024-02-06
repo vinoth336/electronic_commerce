@@ -38,7 +38,6 @@ class CartSettingController extends Controller
      */
     public function store(Request $request)
     {
-
         $CartSettings = CartSettings::first();
         $CartSettings->min_home_delivery_order_amount = $request->input('min_home_delivery_order_amount');
         $CartSettings->min_shop_pickup_order_amount = $request->input('min_shop_pickup_order_amount');
@@ -46,12 +45,11 @@ class CartSettingController extends Controller
         setCartSettings(
             [
                 'free_deliver_min_amt' => $request->input('min_home_delivery_order_amount'),
-                'shop_pickup_min_amt' => $request->input('min_shop_pickup_order_amount')
+                'shop_pickup_min_amt' => $request->input('min_shop_pickup_order_amount'),
             ]
         );
 
         return redirect()->route('cart_settings.index');
-
     }
 
     /**

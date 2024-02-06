@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -40,7 +39,6 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->middleware('guest')->except('login');
     }
 
     protected function guard($name = null)
@@ -87,7 +85,6 @@ class LoginController extends Controller
 
         // reset that cookie's expire time
         Cookie::queue($rememberTokenName, Cookie::get($rememberTokenName), $rememberTokenExpireMinutes);
-
 
         $request->session()->regenerate();
 

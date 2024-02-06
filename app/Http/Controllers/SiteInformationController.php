@@ -122,5 +122,4 @@ class SiteInformationController extends Controller
     {
         //
     }
-
 }

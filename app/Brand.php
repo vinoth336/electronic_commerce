@@ -22,7 +22,7 @@ class Brand extends Model
 
     protected $imageFieldName = 'logo';
 
-    protected $table="brands";
+    protected $table = 'brands';
 
     protected $fillable = ['name', 'status', 'logo', 'sequence', 'slug'];
 

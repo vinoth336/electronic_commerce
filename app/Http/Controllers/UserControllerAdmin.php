@@ -20,8 +20,9 @@ class UserControllerAdmin extends Controller
     public function index()
     {
         $users = User::orderBy('name')->get();
+
         return view('users.list')->with([
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -56,7 +57,7 @@ class UserControllerAdmin extends Controller
     {
         return view('users.show')->with(
             [
-                'siteUser' => $user
+                'siteUser' => $user,
             ]
         );
     }
@@ -92,7 +93,8 @@ class UserControllerAdmin extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            return response(['status' => "Can't Update Data", "message" => $e->getMessage()], 500);
+
+            return response(['status' => "Can't Update Data", 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -107,9 +109,8 @@ class UserControllerAdmin extends Controller
         //
     }
 
-    function export()
+    public function export()
     {
         return Excel::download(new ExportUserList, 'users.xlsx');
-
     }
 }

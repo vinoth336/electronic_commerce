@@ -8,7 +8,6 @@ use Jamesh\Uuid\HasUuid;
 
 class CustomerChangePasswordRequest extends Model
 {
-
     use HasUuid, SoftDeletes;
 
     public $request_status = [
@@ -17,7 +16,7 @@ class CustomerChangePasswordRequest extends Model
         'reset_password' => 'Reset Password',
         'password_changed' => 'Password Changed',
         'cancel' => 'Cancel',
-        'fake' => 'Fake'
+        'fake' => 'Fake',
     ];
 
     public function user()
@@ -39,5 +38,4 @@ class CustomerChangePasswordRequest extends Model
     {
         return $this->request_status[$this->status] ?? null;
     }
-
 }

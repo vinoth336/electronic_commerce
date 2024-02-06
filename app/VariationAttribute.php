@@ -13,13 +13,11 @@ class VariationAttribute extends Model
     public function findOrCreateAttributes($attributes)
     {
         $attributes = [];
-        foreach ($attributes as $attribute) 
-        {
+        foreach ($attributes as $attribute) {
             $data = VariationAttribute::firstOrCreate(['name' => strtoupper($attribute)]);
             $attributeIds[] = (string) $data->id;
         }
 
         return $attributeIds ?? null;
     }
-
 }

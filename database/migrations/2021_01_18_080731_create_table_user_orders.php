@@ -22,7 +22,6 @@ class CreateTableUserOrders extends Migration
             $table->string('comment', 500)->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
         });
     }
 

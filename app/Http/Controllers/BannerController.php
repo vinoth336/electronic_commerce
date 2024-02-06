@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BannerRequest;
 use App\Banners;
+use App\Http\Requests\BannerRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,23 +41,19 @@ class BannerController extends Controller
      */
     public function store(BannerRequest $request)
     {
-
         DB::beginTransaction();
-        try{
-
-
+        try {
             $this->saveBanner(new Banners(), $request);
 
             DB::commit();
 
             return redirect()->route('banner.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Store Data"], 500);
         }
-
     }
 
     /**
@@ -92,20 +88,18 @@ class BannerController extends Controller
     public function update(BannerRequest $request, Banners $banner)
     {
         DB::beginTransaction();
-        try{
-
+        try {
             $this->saveBanner($banner, $request);
 
             DB::commit();
 
             return redirect()->route('banner.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Store Data"], 500);
         }
-
     }
 
     /**
@@ -118,8 +112,7 @@ class BannerController extends Controller
     {
         DB::beginTransaction();
 
-        try{
-
+        try {
             $banner->unlinkImage($banner->Banner);
 
             $banner->delete();
@@ -127,28 +120,25 @@ class BannerController extends Controller
             DB::commit();
 
             return redirect()->route('banner.index')->with('status', 'Created Successfully');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+
             return response(['status' => "Can't Delete Data"], 500);
         }
-
     }
 
     public function updateSequence(Request $request)
     {
-
         DB::beginTransaction();
 
-        try
-        {
-            foreach($request->input('sequence') as $sequence => $id) {
+        try {
+            foreach ($request->input('sequence') as $sequence => $id) {
                 $service = Banners::find($id);
                 $service->sequence = $sequence + 1;
                 $service->save();
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             Log::error($e->getMessage());
             response(['status' => 'Cannot Update Sequence'], 500);
@@ -159,12 +149,11 @@ class BannerController extends Controller
         return response(['message' => 'Updated Successfully'], 200);
     }
 
-
-     /**
+    /**
      * Create or Update the Banner in storage
      *
-     * @param BannerRequest $request
-     * @param Banners $banner
+     * @param  BannerRequest  $request
+     * @param  Banners  $banner
      * @return Banner
      */
     public function saveBanner(Banners $service, $request)
@@ -174,7 +163,7 @@ class BannerController extends Controller
         $service->sequence = $service->sequence ?? Banners::count() + 1;
         $service->banner_size = $request->input('banner_size');
         $service->save();
+
         return $service;
     }
-
 }

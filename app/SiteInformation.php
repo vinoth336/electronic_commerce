@@ -3,11 +3,13 @@
 namespace App;
 
 use App\Traits\StoreImage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Jamesh\Uuid\HasUuid;
 
 class SiteInformation extends Model
 {
+    use HasFactory;
     use StoreImage, HasUuid;
 
     protected $fileParamName = 'logo';
@@ -25,5 +27,4 @@ class SiteInformation extends Model
     public $timestamps = true;
 
     protected $fillable = ['site_name', 'meta_description'];
-
 }

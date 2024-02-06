@@ -18,7 +18,7 @@ class EnquiriesController extends Controller
         'follow-up' => 'Follow Up',
         'order-confirmed' => 'Order Confirmed',
         'cancel' => 'Cancel',
-        'fake' => 'Fake'
+        'fake' => 'Fake',
     ];
 
     public function __construct()
@@ -33,19 +33,17 @@ class EnquiriesController extends Controller
      */
     public function index(Request $request)
     {
-
-
         $enquiries = Enquiries::OrderBy('created_at');
         if ($request->has('status')) {
-            if(!in_array($request->input('status'), ['All', 'all', ''])) {
+            if (! in_array($request->input('status'), ['All', 'all', ''])) {
                 $enquiries->where('status', $request->input('status'));
             }
         }
 
         if ($request->input('from_date') && $request->input('to_date')) {
-            $startDate = date("Y-m-d", strtotime($request->input('from_date')));
-            $endDate   = date("Y-m-d", strtotime($request->input('to_date')));
-            $enquiries->whereBetween("created_at", array($startDate, $endDate));
+            $startDate = date('Y-m-d', strtotime($request->input('from_date')));
+            $endDate = date('Y-m-d', strtotime($request->input('to_date')));
+            $enquiries->whereBetween('created_at', [$startDate, $endDate]);
         }
 
         return view('enquiries.list', ['enquiries' => $enquiries->get(), 'enquiry_status' => $this->enquiry_status]);
@@ -72,14 +70,13 @@ class EnquiriesController extends Controller
         DB::beginTransaction();
 
         try {
-
             Enquiries::create(
                 [
-                    'name' => $request->input("name"),
-                    'email' => $request->input("name"),
-                    'phone_no' => $request->input("name"),
-                    'subject' => $request->input("name"),
-                    'message' => $request->input("name"),
+                    'name' => $request->input('name'),
+                    'email' => $request->input('name'),
+                    'phone_no' => $request->input('name'),
+                    'subject' => $request->input('name'),
+                    'message' => $request->input('name'),
                     'status' => 'Pending',
                 ]
             );
@@ -88,7 +85,7 @@ class EnquiriesController extends Controller
 
             return response(['status' => 'Updated Successfully'], 200);
         } catch (Exception $e) {
-            Log::error('Enquiry Form Error ' . $e->getMessage());
+            Log::error('Enquiry Form Error '.$e->getMessage());
             DB::rollback();
 
             return response(['status' => 'Sorry Something Went Wrong'], 500);
@@ -128,7 +125,6 @@ class EnquiriesController extends Controller
     {
         $enquiry->status = $request->input('status');
         $enquiry->comment = $request->input('comment');
-
 
         $enquiry->save();
 

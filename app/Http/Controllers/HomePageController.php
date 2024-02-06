@@ -62,6 +62,7 @@ class HomePageController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
+
             return response(['status' => 'Cannot Import Images'], 500);
         }
 
@@ -93,7 +94,7 @@ class HomePageController extends Controller
         return view('home_page.edit', [
             'homePage' => $homePage,
             'toShow' => $toShow,
-            'homePageSections' => $homePageSections
+            'homePageSections' => $homePageSections,
         ]);
     }
 
@@ -167,35 +168,33 @@ class HomePageController extends Controller
             'services' => $services,
             'servicesForEnquiries' => $servicesForEnquiries,
             'page' => 'home',
-            'homePageSections' => $homePageSections
+            'homePageSections' => $homePageSections,
         ]);
     }
 
     public function makeDefault(Request $request, HomePage $homePage)
     {
         try {
-            
             DB::beginTransaction();
 
             $previousHomePage = HomePage::where('is_default', 1)->first();
-            if($previousHomePage) {
+            if ($previousHomePage) {
                 $previousHomePage->is_default = 0;
                 $previousHomePage->save();
-            } 
+            }
 
             $homePage->is_default = 1;
             $homePage->save();
             DB::commit();
-            
+
             $homePages = HomePage::get();
-        
+
             return view('home_page.list', ['homePages' => $homePages])->with('status', 'Update Successfully');
         } catch (Exception $e) {
             DB::rollback();
             info($e->getMessage());
+
             return response(['status' => 'Cannot Import Images'], 500);
         }
-        
-        
     }
 }

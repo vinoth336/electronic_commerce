@@ -26,21 +26,20 @@ class UserRegistrationController extends Controller
 
     public function create(UserRegistrationRequest $request)
     {
-
         DB::beginTransaction();
 
         try {
             $user = User::create([
-            'id' => Str::uuid(),
-            'name' => $request->input('user_name'),
-            'sex' => $request->input('user_sex'),
-            'phone_no' => $request->input('user_phone_no'),
-            'address' => $request->input('user_address'),
-            'city_id' => 1,
-            'state_id' => 2,
-            'zipcode' => $request->input('user_zipcode'),
-            'email' => $request->input('user_email'),
-            'password' => Hash::make($request->input('user_password'))
+                'id' => Str::uuid(),
+                'name' => $request->input('user_name'),
+                'sex' => $request->input('user_sex'),
+                'phone_no' => $request->input('user_phone_no'),
+                'address' => $request->input('user_address'),
+                'city_id' => 1,
+                'state_id' => 2,
+                'zipcode' => $request->input('user_zipcode'),
+                'email' => $request->input('user_email'),
+                'password' => Hash::make($request->input('user_password')),
             ]);
 
             DB::commit();
@@ -48,7 +47,7 @@ class UserRegistrationController extends Controller
             Auth::guard('web')->loginUsingId($user->phone_no);
             $redirectTo = route('public.dashboard');
             $message = ['status' => 'You are Logged in Successfully!'];
-            if($request->has('redirectTo')) {
+            if ($request->has('redirectTo')) {
                 $redirectTo = route('public.cart.checkout');
                 $message['checkout_show_address_info'] = true;
             }
@@ -57,46 +56,43 @@ class UserRegistrationController extends Controller
             ->with($message);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error('Error Occurred in UserRegistraionController@save - ' . $e->getMessage());
+            Log::error('Error Occurred in UserRegistraionController@save - '.$e->getMessage());
 
             echo 'Cant process';
-           // return redirect()->route('public.index')->with(['status' => 'Can\'t Process Request, Please Try Again']);
+            // return redirect()->route('public.index')->with(['status' => 'Can\'t Process Request, Please Try Again']);
         }
-
     }
 
     public function registerationSuccess(Request $request, $hash)
     {
-        try
-        {
+        try {
             $email = decrypt($hash);
             $memberRegistrationRequest = User::findOrFail($email);
             $url = route('public.verify_email', $hash);
 
-            if($memberRegistrationRequest->email_verified_at) {
+            if ($memberRegistrationRequest->email_verified_at) {
                 return redirect()->route('public.login')->with('status', 'Email Verified Successfully, Please login to continue the process');
             }
 
             return view('public.auth.registration_success')
             ->with(['hash' => $hash]);
-
         } catch (ModelNotFoundException $e) {
             return abort(404);
         } catch (Exception $e) {
-            Log::error('Error Occurred in UserRegistrationController@registerationSuccess - ' . $e->getMessage());
+            Log::error('Error Occurred in UserRegistrationController@registerationSuccess - '.$e->getMessage());
+
             return abort(500);
         }
-
     }
 
     public function resendEmailVerification(Request $request)
     {
-        try{
+        try {
             $hash = $request->input('hash');
             $email = decrypt($hash);
             $memberRegistrationRequest = User::findOrFail($email);
 
-            if($memberRegistrationRequest->email_verified_at) {
+            if ($memberRegistrationRequest->email_verified_at) {
                 return redirect()->route('public.login')->with('status', 'Email Verified Successfully, Please login to continue the process');
             }
 
@@ -106,41 +102,43 @@ class UserRegistrationController extends Controller
             ->with([
                 'status' => 'Registered Successfully, Please check your mail for the next process',
                 'hash' => $hash,
-                'resent' => true
+                'resent' => true,
             ]);
-
         } catch (ModelNotFoundException $e) {
             return abort(404);
         } catch (Exception $e) {
-            Log::error('Error Occurred in UserRegistraionController@resendEmailVerification - ' . $e->getMessage());
+            Log::error('Error Occurred in UserRegistraionController@resendEmailVerification - '.$e->getMessage());
+
             return abort(500);
         }
-
     }
 
     public function verifyEmail(Request $request, $hash)
     {
         DB::beginTransaction();
-        try{
+        try {
             $email = decrypt($hash);
             $memberRegistrationRequest = User::where('email', $email)->firstOrFail();
             if(!$memberRegistrationRequest->email_verified_at) {
-                $memberRegistrationRequest->email_verified_at = now();
-                $memberRegistrationRequest->is_phone_number_verified = true;
+                $memberRegistrationRequest = User::findOrFail($email);
+                if (!$memberRegistrationRequest->email_verified_at) {
+                    $memberRegistrationRequest->email_verified_at = now();
+                    $memberRegistrationRequest->is_phone_number_verified = true;
 
-                $memberRegistrationRequest->save();
+                    $memberRegistrationRequest->save();
 
-                DB::commit();
-
-            } else {
-                return view('public.auth.account_verified');
+                    DB::commit();
+                } else {
+                    return view('public.auth.account_verified');
+                }
             }
 
             return redirect()->route('public.login')->with('status', 'Email Verified Successfully, Please login to continue the process');
         } catch (ModelNotFoundException $e) {
             return abort(404);
         } catch (Exception $e) {
-            Log::error('Error Occurred in UserRegistraionController@verifyEmail - ' . $e->getMessage());
+            Log::error('Error Occurred in UserRegistraionController@verifyEmail - '.$e->getMessage());
+
             return abort(500);
         }
     }

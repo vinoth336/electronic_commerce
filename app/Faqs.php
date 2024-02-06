@@ -2,15 +2,15 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Jamesh\Uuid\HasUuid;
 
 class Faqs extends Model
 {
-
+    use HasFactory;
     use SoftDeletes, HasUuid;
-
 
     protected $table = 'faqs';
 
@@ -20,12 +20,8 @@ class Faqs extends Model
 
     public static function boot()
     {
-
         parent::boot();
-        static::creating(function($model)
-        {
-
+        static::creating(function ($model) {
         });
     }
-
 }

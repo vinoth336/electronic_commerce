@@ -28,7 +28,7 @@ class CreateHomePageRequest extends FormRequest
             'status' => 'nullable',
             'make_view' => 'required|in:always,specific',
             'from_date' => 'required_if:make_view,specific|date|nullable',
-            'to_date' => 'required_if:make_view,specific|date|nullable'
+            'to_date' => 'required_if:make_view,specific|date|nullable',
         ];
     }
 }

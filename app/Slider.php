@@ -8,7 +8,6 @@ use Jamesh\Uuid\HasUuid;
 
 class Slider extends Model
 {
-
     use StoreImage, HasUuid;
 
     protected $fileParamName = 'slider';
@@ -28,5 +27,4 @@ class Slider extends Model
     protected $resizeImage = true;
 
     protected $resizeValue = ['width' => 1200, 'height' => 450];
-
 }

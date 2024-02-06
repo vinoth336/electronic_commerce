@@ -5,7 +5,6 @@ namespace App;
 use App\Notifications\SendAccountVerificationOtp;
 use App\Notifications\SendSmsNotification;
 use Illuminate\Auth\MustVerifyEmail as AuthMustVerifyEmail;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id', 'name', 'email', 'password', 'sex', 'city_id', 'state_id', 'zipcode', 'phone_no',
-        'address'
+        'address',
     ];
 
     /**
@@ -35,6 +34,7 @@ class User extends Authenticatable
     ];
 
     public $incrementing = false;
+
     protected $primaryKey = 'phone_no';
 
     /**

@@ -8,6 +8,7 @@ use Jamesh\Uuid\HasUuid;
 class UserOrder extends Model
 {
     use HasUuid;
+
     protected $fillable = ['user_id', 'order_no', 'order_status_id'];
 
     public function ordered_items()
@@ -17,7 +18,7 @@ class UserOrder extends Model
 
     public function getCreatedAtAttribute()
     {
-        return date("Y-m-d", strtotime($this->attributes['created_at']));
+        return date('Y-m-d', strtotime($this->attributes['created_at']));
     }
 
     public function order_status()

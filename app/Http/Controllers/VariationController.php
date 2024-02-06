@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\VariationAttributeRequest;
 use App\Variation;
-use App\VariationAttribute;
 use App\VariationOption;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class VariationController extends Controller
@@ -107,7 +105,7 @@ class VariationController extends Controller
         } catch (Exception $e) {
             DB::rollback();
 
-            info("Getting Error in variationController@update " . $e->getMessage());
+            info('Getting Error in variationController@update '.$e->getMessage());
         }
     }
 

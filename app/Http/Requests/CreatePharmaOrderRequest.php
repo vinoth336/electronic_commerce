@@ -26,7 +26,7 @@ class CreatePharmaOrderRequest extends FormRequest
         return [
             'prescription.*' => 'image|required|mimes:jpeg,png,jpg,gif|max:10000',
             'prescription' => 'max:4',
-            'comment_text' => 'nullable|max:500'
+            'comment_text' => 'nullable|max:500',
         ];
     }
 }

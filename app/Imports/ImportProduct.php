@@ -12,8 +12,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 class ImportProduct implements ToModel, WithHeadingRow
 {
     /**
-     * @param array $row
-     *
+     * @param  array  $row
      * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function model(array $row)
@@ -23,10 +22,9 @@ class ImportProduct implements ToModel, WithHeadingRow
             [
                 'slug' => str_slug($row['product_name']),
                 'name' => ucfirst(strtolower($row['product_name'])),
-                'description' => ''
+                'description' => '',
             ]
         );
-
 
         $product->product_code = $row['product_code'];
         $product->brand_id = null;
@@ -37,24 +35,23 @@ class ImportProduct implements ToModel, WithHeadingRow
         $product->sub_category_id = $this->getSubCategory($row);
         $product->brand_id = $this->getBrand($row);
         $product->save();
-        if($categories = $this->getCategories($row)) {
+        if ($categories = $this->getCategories($row)) {
             $product->services()->sync($categories);
         }
 
         return $product;
     }
 
-
     public function getCategories($row)
     {
         $categoryIds = null;
-        if($row['categories'] != '') {
-            $categories = explode(",", $row['categories']);
-            foreach($categories as $slug) {
+        if ($row['categories'] != '') {
+            $categories = explode(',', $row['categories']);
+            foreach ($categories as $slug) {
                 $slug = trim($slug);
                 $category = Services::firstOrCreate(
                     [
-                        'slug' => str_slug($slug)
+                        'slug' => str_slug($slug),
                     ],
                     [
                         'slug' => str_slug($slug),
@@ -62,11 +59,12 @@ class ImportProduct implements ToModel, WithHeadingRow
                         'category' => 1,
                         'category_type_id' => 'be5c6581-c281-4622-8483-8022af05f75b',
                         'description' => ucfirst(strtolower($slug)),
-                        'sequence' => 1
+                        'sequence' => 1,
                     ]
                 );
                 $categoryIds[] = $category->id;
             }
+
             return $categoryIds;
         }
 
@@ -75,17 +73,18 @@ class ImportProduct implements ToModel, WithHeadingRow
 
     public function getSubCategory($row)
     {
-        if($row['sub_category'] != '') {
+        if ($row['sub_category'] != '') {
             $subCategory = SubCategory::firstOrCreate(
                 [
-                    'slug_name' => str_slug($row['sub_category'])
+                    'slug_name' => str_slug($row['sub_category']),
                 ],
                 [
                     'slug_name' => str_slug($row['sub_category']),
                     'name' => ucfirst(strtolower($row['sub_category'])),
-                    'sequence' => 1
+                    'sequence' => 1,
                 ]
             );
+
             return $subCategory->id ?? null;
         }
 
@@ -94,19 +93,21 @@ class ImportProduct implements ToModel, WithHeadingRow
 
     public function getBrand($row)
     {
-        if($row['brand'] != '') {
+        if ($row['brand'] != '') {
             $brand = Brand::firstOrCreate(
                 [
-                    'slug' => str_slug($row['brand'])
+                    'slug' => str_slug($row['brand']),
                 ],
                 [
                     'slug' => str_slug($row['brand']),
                     'name' => ucfirst(strtolower($row['brand'])),
-                    'sequence' => 1
+                    'sequence' => 1,
                 ]
             );
+
             return $brand->id ?? null;
         }
+
         return null;
     }
 }

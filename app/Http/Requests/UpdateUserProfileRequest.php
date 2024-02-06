@@ -26,7 +26,7 @@ class UpdateUserProfileRequest extends FormRequest
         return [
             'name' => 'required|string',
             'sex' => 'required|in:male,female',
-            'email' => 'nullable|email:rfc,dns|unique:users,email,' . auth()->user()->id,
+            'email' => 'nullable|email:rfc,dns|unique:users,email,'.auth()->user()->id,
             'address' => 'required|string|max:500',
             'zipcode' => 'required|regex:/[0-9]{6}/',
         ];

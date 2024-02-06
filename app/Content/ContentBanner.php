@@ -6,32 +6,35 @@ use Illuminate\Support\Facades\DB;
 
 class ContentBanner extends ContentType
 {
+    public $fillable = ['name', 'style', 'background_color', 'background_image', 'hide_in', 'banner_info', 'target_urls'];
 
-   public $fillable = ['name', 'style', 'background_color', 'background_image', 'hide_in', 'banner_info', 'target_urls'];
+    public $name;
 
-   public $name;
-   public $style;
-   public $background_color;
-   public $background_image;
-   public $hide_in;
-   public $tag_id;
-   public $selected_products = [];
-   public $order_by;
+    public $style;
 
+    public $background_color;
 
-   public function makeView()
-   {
+    public $background_image;
 
-      $styleFileName = $this->getStyleFileName();
+    public $hide_in;
 
-      return view('banner_styles.make_view.' . $styleFileName, ['bannerInfo' => $this->banner_info, 'targetUrlInfo' => $this->target_urls]);
-   }
+    public $tag_id;
 
+    public $selected_products = [];
 
-   public function getStyleFileName()
-   {
-      $style = DB::table('banner_section_styles')->where('id', $this->style)->first();
+    public $order_by;
 
-      return $style->file_name;
-   }
+    public function makeView()
+    {
+        $styleFileName = $this->getStyleFileName();
+
+        return view('banner_styles.make_view.'.$styleFileName, ['bannerInfo' => $this->banner_info, 'targetUrlInfo' => $this->target_urls]);
+    }
+
+    public function getStyleFileName()
+    {
+        $style = DB::table('banner_section_styles')->where('id', $this->style)->first();
+
+        return $style->file_name;
+    }
 }

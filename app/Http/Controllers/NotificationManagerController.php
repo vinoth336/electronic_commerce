@@ -38,7 +38,6 @@ class NotificationManagerController extends Controller
      */
     public function store(Request $request)
     {
-
         $NotificationManager = NotificationManager::first();
         $NotificationManager->order_create = $request->input('order_create');
         $NotificationManager->order_cancel = $request->input('order_cancel');
@@ -46,7 +45,6 @@ class NotificationManagerController extends Controller
         setMailNotificationDetailsInCache();
 
         return redirect()->route('notification_manager.index');
-
     }
 
     /**
